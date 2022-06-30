@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Orchid\Platform\Database\Factories\RoleFactory;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable

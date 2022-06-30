@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\Role;
 
-use Orchid\Platform\Models\Role;
+use App\Models\Role;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
