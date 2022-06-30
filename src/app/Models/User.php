@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Orchid\Platform\Database\Factories\RoleFactory;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
@@ -64,4 +65,14 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    public function meetups()
+    {
+        return $this->hasMany(Meetup::class);
+    }
 }
