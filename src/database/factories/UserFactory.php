@@ -18,7 +18,9 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
-            'name' => $this->faker->name(),
+            'name' => fake()->firstNameMale(),
+            'last_name' => fake()->lastName('male'),
+            'middle_name' => fake()->middleNameMale(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -31,11 +33,15 @@ class UserFactory extends Factory
      *
      * @return static
      */
-    public function unverified()
+    public function admin()
     {
         return $this->state(function (array $attributes) {
             return [
-                'email_verified_at' => null,
+                'name' => 'admin',
+                'last_name' => 'admin',
+                'middle_name' => 'admin',
+                'email' => 'admin@admin.com',
+                'permissions' => '{"platform.systems.roles":true,"platform.systems.users":true,"platform.systems.attachment":true,"platform.index":true}' // TODO fix screening quotes
             ];
         });
     }
