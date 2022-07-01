@@ -84,6 +84,15 @@ class PlatformProvider extends OrchidServiceProvider
 //                    return Dashboard::version();
 //                }, Color::DARK()),
 
+            Menu::make('Все задачи')
+                ->icon('book-open')
+                ->route('platform.tasks')
+                ->title('Задачи'),
+
+            Menu::make('Создать задачу')
+                ->icon('pencil')
+                ->route('platform.tasks.edit'),
+
             Menu::make(__('Users'))
                 ->icon('user')
                 ->route('platform.systems.users')

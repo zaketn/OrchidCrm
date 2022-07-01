@@ -79,4 +79,14 @@ class UserPresenter extends Presenter implements Searchable, Personable
     {
         return $this->entity->search($query);
     }
+
+    /**
+     * Returns person's full name
+     *
+     * @return string
+     */
+    public function fullName(): string
+    {
+        return $this->entity->last_name . ' ' . $this->entity->name . ' ' . $this->entity->middle_name;
+    }
 }

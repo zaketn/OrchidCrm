@@ -24,9 +24,14 @@ class TaskFactory extends Factory
         return [
             'user_id' => $developersRole->getUsers()->random()->id,
             'project_id' => $project->id,
-            'description' => fake()->realText('512')
+            'header' => fake()->realText(30),
+            'description' => fake()->realText('512'),
+            'hours' => fake()->randomDigitNotZero(),
+            'finished' => fake()->boolean(),
+            'start_date' => fake()->dateTime(),
+            'end_date' => fake()->dateTime(),
 
-            // TODO add created_at updated_at
+            //TODO fix end_date min then start_date
         ];
     }
 }
