@@ -19,9 +19,17 @@ class LeadFactory extends Factory
     {
         $customer = Customer::has('company')->inRandomOrder()->first();
 
+        $statuses = ['pending', 'applied', 'declined'];
+        $selectedStatus = $statuses[rand(0, count($statuses) - 1)];
+        $employeeMessage = $selectedStatus == 'declined' ? fake()->realText(32) : null;
+
         return [
             'customer_id' => $customer->id,
-            'description' => fake()->realText('512')
+            'header' => fake()->realText(20),
+            'description' => fake()->realText('512'),
+            'desired_date' => fake()->dateTime(),
+            'status' => $selectedStatus,
+            'employee_message' => $employeeMessage,
         ];
     }
 }
