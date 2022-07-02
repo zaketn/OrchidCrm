@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,14 +17,14 @@ class LeadFactory extends Factory
      */
     public function definition()
     {
-        $customer = Customer::has('company')->inRandomOrder()->first();
+        $customer = User::where('company_id', '!=', 1)->has('company')->inRandomOrder()->first();
 
         $statuses = ['pending', 'applied', 'declined'];
         $selectedStatus = $statuses[rand(0, count($statuses) - 1)];
         $employeeMessage = $selectedStatus == 'declined' ? fake()->realText(32) : null;
 
         return [
-            'customer_id' => $customer->id,
+            'user_id' => $customer->id,
             'header' => fake()->realText(20),
             'description' => fake()->realText('512'),
             'desired_date' => fake()->dateTime(),

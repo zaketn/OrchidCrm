@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('meetup_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained();
-            $table->string('name', 32);
-            $table->string('last_name', 32);
-            $table->string('middle_name', 32);
-            $table->string('phone', 32)->unique();
+            $table->foreignId('meetup_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('meetup_user');
     }
 };

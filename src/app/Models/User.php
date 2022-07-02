@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Orchid\Presenters\UserPresenter;
+use Illuminate\Database\Query\Builder;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
@@ -71,7 +72,7 @@ class User extends Authenticatable
         return new UserPresenter($this);
     }
 
-    public function getFullNameWithRolesAttribute() : string {
+    public function getFullNameAttribute() : string {
         $userRoles = $this->getRoles()->implode('name', ', ');
 
         return $this->attributes['last_name'].' '.$this->attributes['name'].' '.$this->attributes['middle_name'].' | ' . $userRoles;
@@ -81,9 +82,19 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
-
+    //from customer
     public function meetups()
     {
-        return $this->hasMany(Meetup::class);
+        return $this->belongsToMany(Meetup::class);
+    }
+
+    public function company()
+    {
+        return $this->belongsTo(Company::class);
+    }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class);
     }
 }

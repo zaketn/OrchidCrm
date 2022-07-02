@@ -20,14 +20,12 @@ class MeetupFactory extends Factory
     public function definition()
     {
         $agentRole = Role::where('slug', 'agent')->first();
-        $customerWithLead = Customer::has('leads')->inRandomOrder()->first();
+        $customerWithLead = User::where('company_id', '!=', 1)->has('leads')->inRandomOrder()->first();
 
         return [
-            'user_id' => $agentRole->getUsers()->random()->id,
-            'customer_id' => $customerWithLead->id,
             'address' => fake()->streetAddress(),
             'place' => fake()->cityPrefix(),
-            'date_time' => fake()->date() //TODO fix date range
+            'date_time' => fake()->date(), //TODO fix date range
         ];
     }
 }

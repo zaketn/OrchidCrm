@@ -35,9 +35,9 @@ class Lead extends Model
         return new LeadPresenter($this);
     }
 
-    public function customer()
+    public function user()
     {
-        return $this->belongsTo(Customer::class);
+        return $this->belongsTo(User::class);
     }
 
     public function meetups()

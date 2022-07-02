@@ -13,12 +13,8 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('meetups', function (Blueprint $table) {
-            $table->id();
-            $table->string('address', 64);
-            $table->string('place', 32)->nullable();
-            $table->dateTime('date_time');
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->after('id', fn ($table) => $table->foreignId('company_id')->constrained());
         });
     }
 
@@ -29,6 +25,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meetups');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 };

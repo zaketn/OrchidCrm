@@ -41,14 +41,14 @@ class LeadListLayout extends Table
 
             TD::make('desired_date', 'Удобное время'),
 
-            TD::make('customer_id', 'Компания')
+            TD::make('user_id', 'Компания')
                 ->render(
-                    fn (Lead $lead) => $lead->customer->company->name
+                    fn (Lead $lead) => $lead->user->company->name
                 ),
 
-            TD::make('customer_id', 'Имя представителя')
+            TD::make('user_id', 'Имя представителя')
                 ->render(
-                    fn (Lead $lead) => $lead->customer->last_name.' '.$lead->customer->name.' '.$lead->customer->middle_name
+                    fn (Lead $lead) => $lead->user->last_name.' '.$lead->user->name.' '.$lead->user->middle_name
                 ),
 
             TD::make('status', 'Статус')

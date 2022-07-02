@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Screens\Meetup;
 
-use App\Models\Customer;
 use App\Models\Meetup;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -26,7 +25,7 @@ class MeetupEditScreen extends Screen
     public function query(Meetup $meetup): iterable
     {
         return [
-            'meetup' => $meetup
+            'meetup' => $meetup,
         ];
     }
 
@@ -79,16 +78,20 @@ class MeetupEditScreen extends Screen
     {
         return [
             Layout::rows([
-                Relation::make('meetup.customer_id')
+                Relation::make('meetup.users') //TODO fix showing customers when edit
                     ->title('Заказчик')
-                    ->fromModel(Customer::class, 'name')
+                    ->fromModel(User::class, 'name')
                     ->displayAppend('fullName')
+                    ->chunk(50)
+                    ->multiple()
                     ->required(),
 
-                Relation::make('meetup.user_id')
+                Relation::make('meetup.users')
                     ->title('Сотрудник')
                     ->fromModel(User::class, 'name')
-                    ->displayAppend('fullNameWithRoles')
+                    ->displayAppend('fullName')
+                    ->chunk(50)
+                    ->multiple()
                     ->required(),
 
                 Input::make('meetup.address')
@@ -109,6 +112,7 @@ class MeetupEditScreen extends Screen
 
     public function delete(Meetup $meetup)
     {
+        $meetup->users()->detach();
         $meetup->delete();
 
         Alert::success('Встреча успешно удалена');
@@ -119,6 +123,8 @@ class MeetupEditScreen extends Screen
     public function createOrUpdate(Meetup $meetup, Request $request)
     {
         $meetup->fill($request->meetup)->save();
+        $meetup->users()->attach($request->meetup['users']);
+        $meetup->users()->attach($request->meetup['customers']);
 
         Alert::success('Успешно!');
 

@@ -11,13 +11,9 @@ class Meetup extends Model
     use HasFactory, AsSource;
 
     protected $fillable = [
-        'user_id',
-        'customer_id',
         'address',
         'place',
         'date_time',
-        'status',
-        'employee_message'
     ];
 
     public function lead()
@@ -25,13 +21,9 @@ class Meetup extends Model
         return $this->belongsTo(Lead::class);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
 
-    public function customer()
-    {
-        return $this->belongsTo(Customer::class);
-    }
 }

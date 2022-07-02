@@ -22,4 +22,11 @@ class CompanyFactory extends Factory
             'phone' => fake()->unique()->phoneNumber()
         ];
     }
+
+    public function our()
+    {
+        return $this->state(
+            fn (array $attributes) => ['name' => 'WebDev']
+        );
+    }
 }

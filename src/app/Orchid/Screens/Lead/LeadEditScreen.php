@@ -2,7 +2,6 @@
 
 namespace App\Orchid\Screens\Lead;
 
-use App\Models\Customer;
 use App\Models\Lead;
 use App\Models\Meetup;
 use App\Models\User;
@@ -115,9 +114,9 @@ class LeadEditScreen extends Screen
             ->closeButton('Отмена'),
 
             Layout::rows([
-                Relation::make('lead.customer_id')
+                Relation::make('lead.user_id')
                     ->title('Заказчик')
-                    ->fromModel(Customer::class, 'name')
+                    ->fromModel(User::class, 'name')
                     ->displayAppend('fullName')
                     ->disabled(),
 
@@ -157,7 +156,6 @@ class LeadEditScreen extends Screen
     {
         $meetup = Meetup::create([
             'user_id' => $request->meetup['user_id'],
-            'customer_id' => $lead->customer->id,
             'address' => $request->meetup['address'],
             'place' => $request->meetup['place'],
             'date_time' => $request->lead['desired_date']

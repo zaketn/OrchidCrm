@@ -29,6 +29,8 @@ class UserPresenter extends Presenter implements Searchable, Personable
     }
 
     /**
+     * Return user roles dashed with /
+     *
      * @return string
      */
     public function subTitle(): string

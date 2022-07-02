@@ -17,7 +17,7 @@ class ContractFactory extends Factory
      */
     public function definition()
     {
-        $lead = Lead::has('customer')->inRandomOrder()->first();
+        $lead = Lead::has('user')->inRandomOrder()->first();
 
         return [
             'lead_id' => $lead->id,

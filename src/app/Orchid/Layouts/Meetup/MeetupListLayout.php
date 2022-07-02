@@ -34,14 +34,14 @@ class MeetupListLayout extends Table
                     fn (Meetup $meetup) => Link::make($meetup->id)->route('platform.meetups.edit', $meetup)
                 ),
 
-            TD::make('user_id', 'Сотрудник')
+            TD::make('users', 'Сотрудник')
                 ->render(
-                    fn (Meetup $meetup) => $meetup->user->last_name.' '.$meetup->user->name.' '.$meetup->user->middle_name
+                    fn (Meetup $meetup) => $meetup->users->where('company_id', 1)->implode('last_name', ', ')
                 ),
 
-            TD::make('customer_id', 'Заказчик')
+            TD::make('customers', 'Заказчик')
                 ->render(
-                    fn (Meetup $meetup) => $meetup->customer->last_name.' '.$meetup->customer->name.' '.$meetup->customer->middle_name
+                    fn (Meetup $meetup) => $meetup->users->where('company_id', '!=', 1)->implode('last_name', ', ')
                 ),
 
             TD::make('address', 'Адрес встречи'),
