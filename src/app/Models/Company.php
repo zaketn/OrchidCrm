@@ -9,6 +9,12 @@ class Company extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+        'email',
+        'phone'
+    ];
+
     public function users()
     {
         return $this->hasMany(User::class);

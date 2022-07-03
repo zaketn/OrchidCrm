@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             ContractSeeder::class,
             ProjectSeeder::class,
             TaskSeeder::class,
-//            MeetupSeeder::class, //TODO make meetup generation for each user with customer role
+            // MeetupSeeder::class,
+            // TODO make meetup generation for each user with customer role
         ]);
     }
 }

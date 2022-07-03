@@ -12,11 +12,25 @@
         <form method="POST" action="{{ route('register') }}">
             @csrf
 
-            <!-- Name -->
-            <div>
-                <x-label for="name" :value="__('Name')" />
+            <!-- Last Name -->
+            <div class="mt-4">
+                <x-label for="last_name" value="Фамилия" />
 
-                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                <x-input id="last_name" class="block mt-1 w-full" type="text" name="last_name" :value="old('last_name')" required autofocus />
+            </div>
+
+            <!-- First Name -->
+            <div class="mt-4">
+                <x-label for="name" value="Имя" />
+
+                <x-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required/>
+            </div>
+
+            <!-- Middle Name -->
+            <div class="mt-4">
+                <x-label for="middle_name" value="Отчество" />
+
+                <x-input id="middle_name" class="block mt-1 w-full" type="text" name="middle_name" :value="old('middle_name')"/>
             </div>
 
             <!-- Email Address -->
@@ -24,6 +38,20 @@
                 <x-label for="email" :value="__('Email')" />
 
                 <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+            </div>
+
+            <!-- Phone Number -->
+            <div class="mt-4">
+                <x-label for="phone" value="Номер телефона" />
+
+                <x-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required />
+            </div>
+
+            <!-- Company -->
+            <div class="mt-4">
+                <x-label for="company" value="Название компании" />
+
+                <x-input id="company" class="block mt-1 w-full" type="text" name="company" :value="old('company')" required />
             </div>
 
             <!-- Password -->
@@ -38,7 +66,7 @@
 
             <!-- Confirm Password -->
             <div class="mt-4">
-                <x-label for="password_confirmation" :value="__('Confirm Password')" />
+                <x-label for="password_confirmation" value="Повторите пароль" />
 
                 <x-input id="password_confirmation" class="block mt-1 w-full"
                                 type="password"
@@ -47,11 +75,11 @@
 
             <div class="flex items-center justify-end mt-4">
                 <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('login') }}">
-                    {{ __('Already registered?') }}
+                    Уже зарегистрированы?
                 </a>
 
                 <x-button class="ml-4">
-                    {{ __('Register') }}
+                    Регистрация
                 </x-button>
             </div>
         </form>

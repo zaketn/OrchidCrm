@@ -21,7 +21,6 @@ class ContractFactory extends Factory
 
         return [
             'lead_id' => $lead->id,
-            'name' => fake()->unique()->lexify('Project ??????'),
             'file_name' => fake()->unique()->md5().'.pdf'
         ];
     }

@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lead_id')->constrained();
-            $table->string('name', 64)->unique();
             $table->string('file_name', 128)->unique();
             $table->timestamps();
         });

@@ -24,6 +24,7 @@ class ProjectFactory extends Factory
         return [
             'user_id' => $hlDevelopersRole->getUsers()->random()->id,
             'contract_id' => $contract->id,
+            'name' => fake()->unique()->lexify('Project ??????'),
             'repo_link' => fake()->unique()->url()
         ];
     }

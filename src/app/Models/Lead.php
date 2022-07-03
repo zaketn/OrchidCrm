@@ -17,7 +17,7 @@ class Lead extends Model
     public const STATUS_PENDING = 'pending';
 
     protected $fillable = [
-        'customer_id',
+        'user_id',
         'header',
         'description',
         'desired_date',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Registered;
@@ -35,13 +36,28 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['string', 'max:255'],
+            'phone' => ['required', 'string', 'between:8,32'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'company' => ['required', 'string', 'between:5,128'],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $company = Company::where('name', $request->company);
+        if(! $company->exists()){
+            $company = Company::create([
+                'name' => $request->company
+            ]);
+        }
+
         $user = User::create([
             'name' => $request->name,
+            'last_name' => $request->last_name,
+            'middle_name' => $request->middle_name,
             'email' => $request->email,
+            'phone' => $request->phone,
+            'company_id' => $company->id,
             'password' => Hash::make($request->password),
         ]);
 

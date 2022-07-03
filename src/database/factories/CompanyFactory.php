@@ -17,7 +17,7 @@ class CompanyFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->unique()->company(),
+            'name' =>  fake()->unique()->company(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber()
         ];
