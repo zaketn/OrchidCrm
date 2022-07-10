@@ -13,12 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('meetups', function (Blueprint $table) {
+        Schema::create('task_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('lead_id')->nullable()->constrained();
-            $table->string('address', 64);
-            $table->string('place', 32)->nullable();
-            $table->dateTime('date_time');
+            $table->foreignId('task_id')->constrained();
+            $table->foreignId('user_id')->constrained();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('meetups');
+        Schema::dropIfExists('task_user');
     }
 };

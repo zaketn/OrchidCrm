@@ -88,7 +88,7 @@ class LeadEditScreen extends Screen
                    Relation::make('meetup.user_id')
                        ->title('Заказчик встретится с данным сотрудником: ')
                        ->fromModel(User::class, 'name')
-                       ->displayAppend('fullNameWithRoles')
+                       ->displayAppend('fullName')
                        ->chunk(30)
                        ->required(),
 
@@ -160,6 +160,9 @@ class LeadEditScreen extends Screen
             'place' => $request->meetup['place'],
             'date_time' => $request->lead['desired_date']
         ]);
+
+        $meetup->users()->attach($request->lead['user_id']);
+        $meetup->users()->attach($request->meetup['user_id']);
 
         $lead->status = $lead::STATUS_APPLIED;
         $lead->save();

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -23,10 +24,13 @@ class CompanyFactory extends Factory
         ];
     }
 
-    public function our()
+    public function local()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'WebDev']
-        );
+            fn(array $attributes) => [
+                'name' => Company::LOCAL_COMPANY,
+                'email' => Company::LOCAL_EMAIL,
+                'phone' => Company::LOCAL_PHONE
+            ]);
     }
 }

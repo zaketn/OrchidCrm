@@ -14,7 +14,6 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'company_id',
         'name',
         'last_name',
         'middle_name',
@@ -83,9 +82,9 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->belongsToMany(Task::class);
     }
-    //from customer
+
     public function meetups()
     {
         return $this->belongsToMany(Meetup::class);
@@ -99,5 +98,10 @@ class User extends Authenticatable
     public function leads()
     {
         return $this->hasMany(Lead::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
     }
 }

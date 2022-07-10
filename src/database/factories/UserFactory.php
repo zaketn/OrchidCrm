@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Orchid\Support\Facades\Dashboard;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -19,9 +20,9 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'company_id' => Company::factory(),
             'name' => fake()->firstNameMale(),
             'last_name' => fake()->lastName('male'),
-            'company_id' => 1,
             'middle_name' => fake()->middleNameMale(),
             'phone' => fake()->unique()->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
@@ -32,23 +33,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Create user with customer role
-     *
-     * @return static
-     */
-    public function customer()
-    {
-        return $this->state(function (array $attributes) {
-            $randomCompany = Company::inRandomOrder()->first();
-
-            return [
-                'company_id' => $randomCompany->id,
-            ];
-        });
-    }
-
-    /**
-     * Create superuser
+     * Define the model's admin state
      *
      * @return static
      */
@@ -60,7 +45,7 @@ class UserFactory extends Factory
                 'last_name' => 'admin',
                 'middle_name' => 'admin',
                 'email' => 'admin@admin.com',
-                'permissions' => '{"platform.systems.roles":true,"platform.systems.users":true,"platform.systems.attachment":true,"platform.index":true}' // TODO fix screening quotes
+                'permissions' => Dashboard::getAllowAllPermission()
             ];
         });
     }

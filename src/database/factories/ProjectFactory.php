@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use App\Models\Contract;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,12 +20,10 @@ class ProjectFactory extends Factory
      */
     public function definition()
     {
-        $hlDevelopersRole = Role::where('slug', 'hl_dev')->first();
-        $contract = Contract::has('lead')->inRandomOrder()->first();
-
         return [
-            'user_id' => $hlDevelopersRole->getUsers()->random()->id,
-            'contract_id' => $contract->id,
+            'user_id' => User::factory(),
+            'contract_id' => Contract::factory(),
+            'company_id' => Company::factory(),
             'name' => fake()->unique()->lexify('Project ??????'),
             'repo_link' => fake()->unique()->url()
         ];

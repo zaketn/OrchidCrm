@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Meetup;
 
+use App\Models\Lead;
 use App\Models\Meetup;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -78,7 +79,7 @@ class MeetupEditScreen extends Screen
     {
         return [
             Layout::rows([
-                Relation::make('meetup.users') //TODO fix showing customers when edit
+                Relation::make('meetup.customers') //TODO fix showing customers when edit
                     ->title('Заказчик')
                     ->fromModel(User::class, 'name')
                     ->displayAppend('fullName')
@@ -93,6 +94,12 @@ class MeetupEditScreen extends Screen
                     ->chunk(50)
                     ->multiple()
                     ->required(),
+
+                Relation::make('meetup.lead_id')
+                    ->title('На основе заявки: ')
+                    ->fromModel(Lead::class, 'header')
+                    ->chunk(50)
+                    ->help('Может быть пустым'),
 
                 Input::make('meetup.address')
                     ->title('Адрес')

@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Lead;
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,10 +17,8 @@ class ContractFactory extends Factory
      */
     public function definition()
     {
-        $lead = Lead::has('user')->inRandomOrder()->first();
-
         return [
-            'lead_id' => $lead->id,
+            'company_id' => Company::factory(),
             'file_name' => fake()->unique()->md5().'.pdf'
         ];
     }

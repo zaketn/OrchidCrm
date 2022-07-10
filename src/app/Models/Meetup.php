@@ -11,6 +11,7 @@ class Meetup extends Model
     use HasFactory, AsSource;
 
     protected $fillable = [
+        'lead_id',
         'address',
         'place',
         'date_time',
