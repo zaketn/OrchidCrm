@@ -32,30 +32,45 @@ class LeadListLayout extends Table
 
             TD::make('header', 'Заголовок')
                 ->align(TD::ALIGN_LEFT)
-                ->render(function(Lead $lead){
+                ->render(function (Lead $lead) {
                     return Link::make($lead->header)->route('platform.leads.edit', $lead);
                 })
                 ->render(
-                    fn (Lead $lead) => Link::make($lead->header)->route('platform.leads.edit', $lead)
+                    fn(Lead $lead) => Link::make($lead->header)->route('platform.leads.edit', $lead)
                 ),
 
-            TD::make('desired_date', 'Удобное время'),
+            TD::make('desired_date', 'Удобное время')
+                ->render(
+                    fn(Lead $lead) => $lead->presenter()->localizedDate()
+                )
+                ->sort(),
 
             TD::make('user_id', 'Компания')
                 ->render(
-                    fn (Lead $lead) => $lead->user->company->first()->name
+                    fn(Lead $lead) => $lead->user->company->name
                 ),
 
             TD::make('user_id', 'Имя представителя')
                 ->render(
-                    fn (Lead $lead) => $lead->user->presenter()->fullName()
+                    fn(Lead $lead) => $lead->user->presenter()->fullName()
                 ),
 
             TD::make('status', 'Статус')
                 ->render(
-                    fn (Lead $lead) => Link::make($lead->presenter()->localizedStatus())->route('platform.leads.edit', $lead)
+                    fn(Lead $lead) => $lead->presenter()->localizedStatus()
                 )
                 ->sort(),
+
+            TD::make('actions', 'Действия')
+                ->alignCenter()
+                ->width('100px')
+                ->render(function (Lead $lead) {
+                    return DropDown::make()
+                        ->icon('options-vertical')
+                        ->list([
+                           Link::make('Рассмотреть')->route('platform.leads.edit', $lead)
+                        ]);
+                })
         ];
     }
 }

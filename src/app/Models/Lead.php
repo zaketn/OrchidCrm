@@ -27,7 +27,14 @@ class Lead extends Model
 
     protected $allowedSorts = [
         'id',
-        'status'
+        'status',
+        'desired_date'
+    ];
+
+    protected $allowedFilters = [
+        'id',
+        'status',
+        'desired_date'
     ];
 
     public function presenter()

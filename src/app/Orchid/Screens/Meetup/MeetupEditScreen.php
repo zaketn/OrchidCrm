@@ -79,18 +79,20 @@ class MeetupEditScreen extends Screen
     {
         return [
             Layout::rows([
-                Relation::make('meetup.customers') //TODO fix showing customers when edit
+                Relation::make('meetup.customers')
                     ->title('Заказчик')
                     ->fromModel(User::class, 'name')
                     ->displayAppend('fullName')
+                    ->applyScope('customers')
                     ->chunk(50)
                     ->multiple()
                     ->required(),
 
-                Relation::make('meetup.users')
+                Relation::make('meetup.employees')
                     ->title('Сотрудник')
                     ->fromModel(User::class, 'name')
                     ->displayAppend('fullName')
+                    ->applyScope('employees')
                     ->chunk(50)
                     ->multiple()
                     ->required(),
@@ -130,7 +132,7 @@ class MeetupEditScreen extends Screen
     public function createOrUpdate(Meetup $meetup, Request $request)
     {
         $meetup->fill($request->meetup)->save();
-        $meetup->users()->attach($request->meetup['users']);
+        $meetup->users()->attach($request->meetup['employees']);
         $meetup->users()->attach($request->meetup['customers']);
 
         Alert::success('Успешно!');

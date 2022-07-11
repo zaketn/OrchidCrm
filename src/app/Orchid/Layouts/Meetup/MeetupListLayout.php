@@ -5,6 +5,7 @@ namespace App\Orchid\Layouts\Meetup;
 use App\Models\Customer;
 use App\Models\Meetup;
 use App\Models\User;
+use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
@@ -31,24 +32,38 @@ class MeetupListLayout extends Table
         return [
             TD::make('id', '#')
                 ->render(
-                    fn (Meetup $meetup) => Link::make($meetup->id)->route('platform.meetups.edit', $meetup)
-                ),
+                    fn(Meetup $meetup) => Link::make($meetup->id)->route('platform.meetups.edit', $meetup)
+                )
+                ->sort(),
 
             TD::make('users', 'Сотрудник')
                 ->render(
-                    fn (Meetup $meetup) => $meetup->users->where('company_id', 1)->implode('last_name', ', ')
+                    fn(Meetup $meetup) => $meetup->users->where('company_id', 1)->implode('last_name', ', ')
                 ),
 
             TD::make('customers', 'Заказчик')
                 ->render(
-                    fn (Meetup $meetup) => $meetup->users->where('company_id', '!=', 1)->implode('last_name', ', ')
+                    fn(Meetup $meetup) => $meetup->users->where('company_id', '!=', 1)->implode('last_name', ', ')
                 ),
 
-            TD::make('address', 'Адрес встречи'),
+            TD::make('address', 'Адрес встречи')->sort(),
 
             TD::make('place', 'Место встречи'),
 
-            TD::make('date_time', 'Дата и время встречи'),
+            TD::make('date_time', 'Дата и время встречи')
+                ->render(fn(Meetup $meetup) => $meetup->presenter()->localizedDate())
+                ->sort(),
+
+            TD::make('actions', 'Действия')
+                ->alignCenter()
+                ->width('100px')
+                ->render(function (Meetup $meetup) {
+                    return DropDown::make()
+                        ->icon('options-vertical')
+                        ->list([
+                            Link::make('Просмотреть')->route('platform.meetups.edit', $meetup),
+                        ]);
+                })
         ];
     }
 }

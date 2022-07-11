@@ -8,16 +8,26 @@ use App\Models\Lead;
 
 class LeadPresenter extends Presenter
 {
+    /**
+     * Transforms status from DB for easy reading
+     *
+     * @return string
+     */
     public function localizedStatus(): string
     {
         return match ($this->entity->status) {
             'applied' => 'Одобрена',
             'declined' => 'Отклонена',
-            'pending' => 'В обработке',
+            'pending' => 'На рассмотрении',
             default => '',
         };
     }
 
+    /**
+     * Return bootstrap text color class according to status
+     *
+     * @return string
+     */
     public function statusColor() : string {
         return match ($this->entity->status) {
             Lead::STATUS_PENDING => 'text-warning',
@@ -27,7 +37,19 @@ class LeadPresenter extends Presenter
         };
     }
 
-    public function localizedTime() : string {
+    /**
+     * Transforms DateTime field from DB for easy reading
+     * If the DateTime's year is matches current year then include it
+     *
+     * @return string
+     */
+    public function localizedDate() : string {
+        $isCurrentYear = Carbon::create($this->entity->desired_date)->year == Carbon::now()->year;
+
+        if($isCurrentYear){
+            return Carbon::create($this->entity->desired_date)->translatedFormat('j F, g:i');
+        }
+
         return Carbon::create($this->entity->desired_date)->translatedFormat('j F Y, g:i');
     }
 }

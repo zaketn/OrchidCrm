@@ -2,13 +2,30 @@
 
 namespace App\Models;
 
+use App\Orchid\Presenters\MeetupPresenter;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Filters\Filterable;
 use Orchid\Screen\AsSource;
 
 class Meetup extends Model
 {
-    use HasFactory, AsSource;
+    use HasFactory, AsSource, Filterable;
+
+    public const STATUS_ARRANGED = 'arranged';
+    public const STATUS_PAST = 'past';
+
+    protected $allowedSorts = [
+        'id',
+        'address',
+        'date_time',
+    ];
+
+    protected $allowedFilters = [
+        'address',
+        'date_time',
+    ];
 
     protected $fillable = [
         'lead_id',
@@ -16,6 +33,11 @@ class Meetup extends Model
         'place',
         'date_time',
     ];
+
+    public function presenter()
+    {
+        return new MeetupPresenter($this);
+    }
 
     public function lead()
     {
@@ -27,4 +49,13 @@ class Meetup extends Model
         return $this->belongsToMany(User::class);
     }
 
+    public function customers()
+    {
+        return $this->users()->whereRelation('roles', 'slug', 'customer');
+    }
+
+    public function employees()
+    {
+        return $this->users()->whereRelation('roles', 'slug', '!=', 'customer');
+    }
 }

@@ -104,4 +104,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Project::class);
     }
+
+    public function scopeCustomers()
+    {
+        return $this->whereRelation('roles', 'slug', 'customer');
+    }
+
+    public function scopeEmployees()
+    {
+        return $this->whereRelation('roles', 'slug', '!=', 'customer');
+    }
 }

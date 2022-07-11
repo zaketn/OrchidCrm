@@ -3,6 +3,9 @@
 namespace App\Orchid\Screens\Meetup;
 
 use App\Models\Meetup;
+use App\Orchid\Filters\Meetup\MeetupDateFilter;
+use App\Orchid\Filters\Meetup\MeetupStatusFilter;
+use App\Orchid\Layouts\Meetup\MeetupFilterLayout;
 use App\Orchid\Layouts\Meetup\MeetupListLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
@@ -17,7 +20,10 @@ class MeetupListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'meetups' => Meetup::paginate()
+            'meetups' => Meetup::filters()
+                ->filtersApply([MeetupDateFilter::class, MeetupStatusFilter::class])
+                ->orderBy('date_time', 'desc')
+                ->paginate()
         ];
     }
 
@@ -33,7 +39,7 @@ class MeetupListScreen extends Screen
 
     public function description(): ?string
     {
-        return 'Список всех встреч';
+        return 'Список всех встреч. Для удобства можете пользоваться фильтрами.';
     }
 
     /**
@@ -58,7 +64,8 @@ class MeetupListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            MeetupListLayout::class
+            MeetupFilterLayout::class,
+            MeetupListLayout::class,
         ];
     }
 }

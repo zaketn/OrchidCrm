@@ -3,6 +3,10 @@
 namespace App\Orchid\Screens\Lead;
 
 use App\Models\Lead;
+use App\Orchid\Filters\Lead\LeadCompanyFilter;
+use App\Orchid\Filters\Lead\LeadDateFilter;
+use App\Orchid\Filters\Lead\LeadStatusFilter;
+use App\Orchid\Layouts\Lead\LeadFilterLayout;
 use App\Orchid\Layouts\Lead\LeadListLayout;
 use Orchid\Screen\Screen;
 
@@ -16,7 +20,13 @@ class LeadListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'leads' => Lead::filters()->defaultSort('status', 'desc')->paginate()
+            'leads' => Lead::filters()->filtersApply([
+                LeadStatusFilter::class,
+                LeadCompanyFilter::class,
+                LeadDateFilter::class,
+            ])
+                ->orderBy('desired_date', 'desc')
+                ->paginate()
         ];
     }
 
@@ -30,9 +40,9 @@ class LeadListScreen extends Screen
         return 'Заявки';
     }
 
-    public function description() : ?string
+    public function description(): ?string
     {
-        return 'Список всех, когда либо поступавших заявок';
+        return 'Список всех, когда либо поступавших заявок. Для удобства используйте фильтры.';
     }
 
     /**
@@ -55,7 +65,8 @@ class LeadListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            LeadListLayout::class
+            LeadFilterLayout::class,
+            LeadListLayout::class,
         ];
     }
 }
