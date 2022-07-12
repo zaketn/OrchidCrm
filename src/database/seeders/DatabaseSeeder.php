@@ -71,8 +71,7 @@ class DatabaseSeeder extends Seeder
             $contract = Contract::factory()->for($company)->create();
 
             $project = Project::factory()
-                ->for($hlDevUser->random())
-                ->for($company)
+                ->for($customerUser)
                 ->for($contract)
                 ->create();
 

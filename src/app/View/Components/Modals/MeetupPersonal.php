@@ -1,11 +1,11 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\Modals;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Component;
 
-class Header extends Component
+class MeetupPersonal extends Component
 {
     public $user;
 
@@ -26,6 +26,6 @@ class Header extends Component
      */
     public function render()
     {
-        return view('components.header');
+        return view('components.modals.meetup-personal');
     }
 }

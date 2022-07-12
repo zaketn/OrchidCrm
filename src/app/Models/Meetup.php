@@ -51,11 +51,15 @@ class Meetup extends Model
 
     public function customers()
     {
-        return $this->users()->whereRelation('roles', 'slug', 'customer');
+        return $this->users()->whereHas('roles', function (Builder $builder) {
+            $builder->whereIn('slug', User::ROLES_CUSTOMERS);
+        });
     }
 
     public function employees()
     {
-        return $this->users()->whereRelation('roles', 'slug', '!=', 'customer');
+        return $this->users()->whereHas('roles', function (Builder $builder) {
+            $builder->whereIn('slug', User::ROLES_EMPLOYEES);
+        });
     }
 }

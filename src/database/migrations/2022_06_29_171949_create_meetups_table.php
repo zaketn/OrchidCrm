@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('meetups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('lead_id')->nullable()->constrained();
-            $table->string('address', 64);
-            $table->string('place', 32)->nullable();
+            $table->string('address', 128);
+            $table->string('place', 128)->nullable();
             $table->dateTime('date_time');
             $table->timestamps();
         });

@@ -13,7 +13,8 @@ class MeetupPresenter extends Presenter
      *
      * @return string
      */
-    public function localizedDate() : string {
+    public function localizedDate() : string
+    {
         $isCurrentYear = Carbon::create($this->entity->date_time)->year == Carbon::now()->year;
 
         if($isCurrentYear){

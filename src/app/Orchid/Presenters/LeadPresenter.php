@@ -16,9 +16,9 @@ class LeadPresenter extends Presenter
     public function localizedStatus(): string
     {
         return match ($this->entity->status) {
-            'applied' => 'Одобрена',
-            'declined' => 'Отклонена',
-            'pending' => 'На рассмотрении',
+            Lead::STATUS_APPLIED => 'Одобрена',
+            Lead::STATUS_DECLINED => 'Отклонена',
+            Lead::STATUS_PENDING => 'На рассмотрении',
             default => '',
         };
     }

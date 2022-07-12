@@ -119,6 +119,13 @@ class MeetupEditScreen extends Screen
         ];
     }
 
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.meetups.edit',
+        ];
+    }
+
     public function delete(Meetup $meetup)
     {
         $meetup->users()->detach();

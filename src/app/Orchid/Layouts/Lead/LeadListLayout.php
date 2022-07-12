@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Lead;
 
 use App\Models\Lead;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -71,6 +72,7 @@ class LeadListLayout extends Table
                            Link::make('Рассмотреть')->route('platform.leads.edit', $lead)
                         ]);
                 })
+                ->canSee(Auth::user()->hasAccess('platform.leads.edit')),
         ];
     }
 }

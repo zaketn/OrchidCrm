@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Orchid\Presenters\UserPresenter;
-use Illuminate\Database\Query\Builder;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    public const ROLES_EMPLOYEES = ['cio', 'ceo', 'manager', 'agent', 'hl_dev', 'dev'];
+    public const ROLES_CUSTOMERS = ['customer'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -113,5 +115,10 @@ class User extends Authenticatable
     public function scopeEmployees()
     {
         return $this->whereRelation('roles', 'slug', '!=', 'customer');
+    }
+
+    public function isEmployee()
+    {
+        return $this->roles()->whereIn('slug', $this::ROLES_EMPLOYEES)->exists();
     }
 }

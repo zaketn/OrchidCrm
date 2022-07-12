@@ -32,11 +32,13 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('Заявки')
                 ->icon('envelope')
                 ->route('platform.leads')
+                ->permission(['platform.leads', 'platform.leads.edit'])
                 ->title('Работа с клиентами'),
 
             Menu::make('Встречи')
                 ->icon('event')
-                ->route('platform.meetups'),
+                ->route('platform.meetups')
+                ->permission(['platform.meetups', 'platform.meetups.edit']),
 
             Menu::make(__('Users'))
                 ->icon('user')
@@ -72,6 +74,12 @@ class PlatformProvider extends OrchidServiceProvider
             ItemPermission::group(__('System'))
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users')),
+
+            ItemPermission::group('Работа с клиентами')
+                ->addPermission('platform.leads','Просмотр заявок')
+                ->addPermission('platform.leads.edit','Просмотр и управление заявками')
+                ->addPermission('platform.meetups', 'Просмотр встреч')
+                ->addPermission('platform.meetups.edit', 'Просмотр и управление встречами'),
         ];
     }
 }

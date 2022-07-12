@@ -90,6 +90,7 @@ class LeadEditScreen extends Screen
                        ->fromModel(User::class, 'name')
                        ->displayAppend('fullName')
                        ->chunk(30)
+                       ->multiple()
                        ->required(),
 
                    Input::make('meetup.address')
@@ -138,6 +139,13 @@ class LeadEditScreen extends Screen
                     ->title('Статус')
                     ->disabled()
             ])
+        ];
+    }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.leads.edit',
         ];
     }
 

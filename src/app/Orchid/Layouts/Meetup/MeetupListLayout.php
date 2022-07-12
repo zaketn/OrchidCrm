@@ -2,9 +2,8 @@
 
 namespace App\Orchid\Layouts\Meetup;
 
-use App\Models\Customer;
 use App\Models\Meetup;
-use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
@@ -64,6 +63,7 @@ class MeetupListLayout extends Table
                             Link::make('Просмотреть')->route('platform.meetups.edit', $meetup),
                         ]);
                 })
+                ->canSee(Auth::user()->hasAccess('platform.meetups.edit'))
         ];
     }
 }

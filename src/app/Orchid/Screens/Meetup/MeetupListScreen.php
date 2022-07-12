@@ -68,4 +68,12 @@ class MeetupListScreen extends Screen
             MeetupListLayout::class,
         ];
     }
+
+    public function permission(): ?iterable
+    {
+        return [
+            'platform.meetups',
+            'platform.meetups.edit',
+        ];
+    }
 }

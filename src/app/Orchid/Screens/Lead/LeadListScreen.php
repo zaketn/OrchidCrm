@@ -69,4 +69,12 @@ class LeadListScreen extends Screen
             LeadListLayout::class,
         ];
     }
+
+    public function permission() : ?iterable
+    {
+        return [
+            'platform.leads',
+            'platform.leads.edit',
+        ];
+    }
 }
