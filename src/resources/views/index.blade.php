@@ -52,7 +52,7 @@
             <x-modals.lead-create></x-modals.lead-create>
             <x-modals.lead-personal></x-modals.lead-personal>
             <x-modals.meetup-personal></x-modals.meetup-personal>
-            <x-modals.projects-company></x-modals.projects-company>
+            <x-modals.project-personal></x-modals.project-personal>
             <x-modals.logout></x-modals.logout>
         @endauth
 
