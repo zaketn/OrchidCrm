@@ -7,6 +7,9 @@ use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    public const ROLES_EMPLOYEES = ['cio', 'ceo', 'manager', 'agent', 'hl_dev', 'dev'];
+    public const ROLES_CUSTOMERS = ['customer'];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -14,8 +17,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'last_name',
+        'middle_name',
+        'phone',
         'email',
-        'employment_date',
         'password',
         'permissions',
     ];
@@ -66,28 +71,54 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    public function getFullNameWithRolesAttribute() : string {
-        $userRoles = [];
-        foreach($this->getRoles() as $role){
-            $userRoles[] = $role->name;
-        }
-        $userRoles = implode(' ', $userRoles);
+    public function presenter()
+    {
+        return new UserPresenter($this);
+    }
+
+    public function getFullNameAttribute() : string {
+        $userRoles = $this->getRoles()->implode('name', ', ');
 
         return $this->attributes['last_name'].' '.$this->attributes['name'].' '.$this->attributes['middle_name'].' | ' . $userRoles;
     }
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->belongsToMany(Task::class);
     }
 
     public function meetups()
     {
-        return $this->hasMany(Meetup::class);
+        return $this->belongsToMany(Meetup::class);
     }
 
-    public function presenter() : UserPresenter
+    public function company()
     {
-        return new UserPresenter($this);
+        return $this->belongsTo(Company::class);
+    }
+
+    public function leads()
+    {
+        return $this->hasMany(Lead::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function scopeCustomers()
+    {
+        return $this->whereRelation('roles', 'slug', 'customer');
+    }
+
+    public function scopeEmployees()
+    {
+        return $this->whereRelation('roles', 'slug', '!=', 'customer');
+    }
+
+    public function isEmployee()
+    {
+        return $this->roles()->whereIn('slug', $this::ROLES_EMPLOYEES)->exists();
     }
 }

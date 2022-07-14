@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Orchid\Support\Facades\Dashboard;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -18,9 +20,11 @@ class UserFactory extends Factory
     public function definition()
     {
         return [
+            'company_id' => Company::factory(),
             'name' => fake()->firstNameMale(),
             'last_name' => fake()->lastName('male'),
             'middle_name' => fake()->middleNameMale(),
+            'phone' => fake()->unique()->phoneNumber(),
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
@@ -29,7 +33,7 @@ class UserFactory extends Factory
     }
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Define the model's admin state
      *
      * @return static
      */
@@ -41,7 +45,7 @@ class UserFactory extends Factory
                 'last_name' => 'admin',
                 'middle_name' => 'admin',
                 'email' => 'admin@admin.com',
-                'permissions' => '{"platform.systems.roles":true,"platform.systems.users":true,"platform.systems.attachment":true,"platform.index":true}' // TODO fix screening quotes
+                'permissions' => Dashboard::getAllowAllPermission()
             ];
         });
     }

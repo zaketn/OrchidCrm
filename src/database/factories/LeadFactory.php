@@ -2,8 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Customer;
+use App\Models\Lead;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Lead>
@@ -17,11 +19,14 @@ class LeadFactory extends Factory
      */
     public function definition()
     {
-        $customer = Customer::has('company')->inRandomOrder()->first();
+        $statuses = collect([Lead::STATUS_PENDING, Lead::STATUS_APPLIED, Lead::STATUS_DECLINED]);
 
         return [
-            'customer_id' => $customer->id,
-            'description' => fake()->realText('512')
+            'user_id' => User::factory(),
+            'header' => fake()->realText(20),
+            'description' => fake()->realText('512'),
+            'desired_date' => fake()->dateTimeBetween('-1 year'),
+            'status' => $statuses->random(),
         ];
     }
 }

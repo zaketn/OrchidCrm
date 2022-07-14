@@ -29,13 +29,15 @@ class UserPresenter extends Presenter implements Searchable, Personable
     }
 
     /**
+     * Return user roles dashed with /
+     *
      * @return string
      */
     public function subTitle(): string
     {
         $roles = $this->entity->roles->pluck('name')->implode(' / ');
 
-        return (string) Str::of($roles)
+        return (string)Str::of($roles)
             ->limit(20)
             ->whenEmpty(function () {
                 return __('Regular user');

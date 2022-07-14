@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Company;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +18,19 @@ class CompanyFactory extends Factory
     public function definition()
     {
         return [
-            'name' => fake()->unique()->company(),
+            'name' =>  fake()->unique()->company(),
             'email' => fake()->unique()->safeEmail(),
             'phone' => fake()->unique()->phoneNumber()
         ];
+    }
+
+    public function local()
+    {
+        return $this->state(
+            fn(array $attributes) => [
+                'name' => Company::LOCAL_COMPANY,
+                'email' => Company::LOCAL_EMAIL,
+                'phone' => Company::LOCAL_PHONE
+            ]);
     }
 }

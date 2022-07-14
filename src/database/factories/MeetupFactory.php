@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Customer;
+use App\Models\Lead;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -19,15 +20,11 @@ class MeetupFactory extends Factory
      */
     public function definition()
     {
-        $agentRole = Role::where('slug', 'agent')->first();
-        $customerWithLead = Customer::has('leads')->inRandomOrder()->first();
-
         return [
-            'user_id' => $agentRole->getUsers()->random()->id,
-            'customer_id' => $customerWithLead->id,
+            'lead_id' => Lead::factory(),
             'address' => fake()->streetAddress(),
-            'place' => fake()->cityPrefix(),
-            'date_time' => fake()->date() //TODO fix date range
+            'place' => fake()->streetSuffix(),
+            'date_time' => fake()->dateTimeBetween('-1 year', '+1 year')
         ];
     }
 }

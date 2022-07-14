@@ -15,8 +15,12 @@ return new class extends Migration
     {
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->constrained();
+            $table->foreignId('user_id')->constrained();
+            $table->string('header', 64);
             $table->string('description', 1024);
+            $table->dateTime('desired_date');
+            $table->string('status', 16);
+            $table->string('employee_message', 128)->nullable();
             $table->timestamps();
         });
     }

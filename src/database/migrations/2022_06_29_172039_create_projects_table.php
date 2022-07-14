@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('contract_id')->constrained();
+            $table->string('status');
             $table->string('name', 64)->unique();
             $table->string('repo_link', 128)->unique();
             $table->timestamps();

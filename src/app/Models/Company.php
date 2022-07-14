@@ -9,8 +9,28 @@ class Company extends Model
 {
     use HasFactory;
 
-    public function customers()
+    public const LOCAL_COMPANY = 'local';
+    public const LOCAL_EMAIL = 'local';
+    public const LOCAL_PHONE = 'local';
+
+    protected $fillable = [
+        'name',
+        'email',
+        'phone'
+    ];
+
+    public function users()
     {
-        return $this->hasMany(Customer::class);
+        return $this->hasMany(User::class);
+    }
+
+    public function projects()
+    {
+        return $this->hasMany(Project::class);
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
     }
 }
