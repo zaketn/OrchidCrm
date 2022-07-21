@@ -6,6 +6,9 @@ use App\Models\Lead;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\DateTimer;
+use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -29,24 +32,22 @@ class LeadListLayout extends Table
     protected function columns(): iterable
     {
         return [
-            TD::make('id', 'ID')->sort(),
-
-            TD::make('header', 'Заголовок')
-                ->align(TD::ALIGN_LEFT)
-                ->render(function (Lead $lead) {
-                    return Link::make($lead->header)->route('platform.leads.edit', $lead);
-                })
+            TD::make('id', '#')
                 ->render(
-                    fn(Lead $lead) => Link::make($lead->header)->route('platform.leads.edit', $lead)
-                ),
+                    fn(Lead $lead) => Link::make($lead->id)->route('platform.leads.edit', $lead)
+                )
+                ->sort(),
+
+            TD::make('header', 'Заголовок')->filter(Input::make()),
 
             TD::make('desired_date', 'Удобное время')
                 ->render(
                     fn(Lead $lead) => $lead->presenter()->localizedDate()
                 )
+                ->filter(DateTimer::make()->format('Y-m-d'))
                 ->sort(),
 
-            TD::make('user_id', 'Компания')
+            TD::make('company', 'Компания')
                 ->render(
                     fn(Lead $lead) => $lead->user->company->name
                 ),
@@ -60,7 +61,15 @@ class LeadListLayout extends Table
                 ->render(
                     fn(Lead $lead) => $lead->presenter()->localizedStatus()
                 )
-                ->sort(),
+                ->sort()
+                ->filter(
+                    Select::make()
+                        ->options([
+                            Lead::STATUS_APPLIED => 'Принята',
+                            Lead::STATUS_DECLINED => 'Отклонена',
+                            Lead::STATUS_PENDING => 'На рассмотрении',
+                        ])
+                ),
 
             TD::make('actions', 'Действия')
                 ->alignCenter()
@@ -69,7 +78,7 @@ class LeadListLayout extends Table
                     return DropDown::make()
                         ->icon('options-vertical')
                         ->list([
-                           Link::make('Рассмотреть')->route('platform.leads.edit', $lead)
+                            Link::make('Рассмотреть')->route('platform.leads.edit', $lead)
                         ]);
                 })
                 ->canSee(Auth::user()->hasAccess('platform.leads.edit')),

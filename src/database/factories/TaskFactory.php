@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Project;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,28 +19,11 @@ class TaskFactory extends Factory
      */
     public function definition()
     {
-
         return [
             'project_id' => Project::factory(),
             'header' => fake()->realText(20),
             'description' => fake()->realText('512'),
-            'hours' => fake()->numberBetween(1, 100),
+            'deadline' => fake()->dateTimeBetween('-1 year', '+1 year'),
         ];
-    }
-
-    /**
-     * State with start_date, end_date fields
-     *
-     * @return TaskFactory
-     */
-    public function finished()
-    {
-        return $this->state(function (array $attributes) {
-           $start_date = fake()->dateTimeBetween('-1 year');
-            return [
-                'start_date' => $start_date,
-                'end_date' => fake()->dateTimeBetween($start_date, '+1 week')
-            ];
-        });
     }
 }

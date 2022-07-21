@@ -13,8 +13,8 @@ use Orchid\Screen\Fields\Quill;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class LeadEditScreen extends Screen
 {
@@ -79,7 +79,7 @@ class LeadEditScreen extends Screen
                    ->required()
                ])
             ])
-            ->title('Отказ на заявку')
+            ->title('Отклонение заявки')
             ->applyButton('Отправить')
             ->closeButton('Отмена'),
 
@@ -155,7 +155,7 @@ class LeadEditScreen extends Screen
         $lead->employee_message = $request->lead['employee_message'];
         $lead->save();
 
-        Alert::success('Заявка #'.$lead->id.' отклонена. Рекомендуется связаться с пользователем для организации встречи.');
+        Toast::success('Заявка #'.$lead->id.' отклонена. Рекомендуется связаться с пользователем для организации встречи.');
 
         return redirect()->route('platform.leads');
     }
@@ -175,7 +175,7 @@ class LeadEditScreen extends Screen
         $lead->status = $lead::STATUS_APPLIED;
         $lead->save();
 
-        Alert::success('Заявка #'.$lead->id.' принята. На ее основе создана встреча #'.$meetup->id);
+        Toast::success('Заявка #'.$lead->id.' принята. На ее основе создана встреча #'.$meetup->id);
 
         return redirect()->route('platform.leads');
     }

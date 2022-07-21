@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Orchid\Presenters\UserPresenter;
+use Illuminate\Database\Eloquent\Builder;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
@@ -76,7 +77,8 @@ class User extends Authenticatable
         return new UserPresenter($this);
     }
 
-    public function getFullNameAttribute() : string {
+    public function getFullNameAttribute() : string
+    {
         $userRoles = $this->getRoles()->implode('name', ', ');
 
         return $this->attributes['last_name'].' '.$this->attributes['name'].' '.$this->attributes['middle_name'].' | ' . $userRoles;
@@ -84,7 +86,7 @@ class User extends Authenticatable
 
     public function tasks()
     {
-        return $this->belongsToMany(Task::class);
+        return $this->hasMany(Task::class);
     }
 
     public function meetups()
@@ -109,12 +111,16 @@ class User extends Authenticatable
 
     public function scopeCustomers()
     {
-        return $this->whereRelation('roles', 'slug', 'customer');
+        return $this->whereHas('roles', function (Builder $builder) {
+            $builder->whereIn('slug', $this::ROLES_CUSTOMERS);
+        });
     }
 
     public function scopeEmployees()
     {
-        return $this->whereRelation('roles', 'slug', '!=', 'customer');
+        return $this->whereHas('roles', function (Builder $builder) {
+            $builder->whereIn('slug', $this::ROLES_EMPLOYEES);
+        });
     }
 
     public function isEmployee()

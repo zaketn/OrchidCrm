@@ -22,8 +22,6 @@ class LeadListScreen extends Screen
         return [
             'leads' => Lead::filters()->filtersApply([
                 LeadStatusFilter::class,
-                LeadCompanyFilter::class,
-                LeadDateFilter::class,
             ])
                 ->orderBy('desired_date', 'desc')
                 ->paginate()

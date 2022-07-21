@@ -6,6 +6,8 @@ use App\Models\Meetup;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Fields\DateTimer;
+use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -28,6 +30,11 @@ class MeetupListLayout extends Table
      */
     protected function columns(): iterable
     {
+        /**
+         * TODO filter by customer
+         * TODO filter by employee
+         */
+
         return [
             TD::make('id', '#')
                 ->render(
@@ -37,20 +44,23 @@ class MeetupListLayout extends Table
 
             TD::make('users', 'Сотрудник')
                 ->render(
-                    fn(Meetup $meetup) => $meetup->users->where('company_id', 1)->implode('last_name', ', ')
+                    fn(Meetup $meetup) => $meetup->employees()->get()->implode('last_name', ', ')
                 ),
 
             TD::make('customers', 'Заказчик')
                 ->render(
-                    fn(Meetup $meetup) => $meetup->users->where('company_id', '!=', 1)->implode('last_name', ', ')
+                    fn(Meetup $meetup) => $meetup->customers()->get()->implode('last_name', ', ')
                 ),
 
-            TD::make('address', 'Адрес встречи')->sort(),
+            TD::make('address', 'Адрес встречи')
+                ->filter(Input::make())
+                ->sort(),
 
             TD::make('place', 'Место встречи'),
 
             TD::make('date_time', 'Дата и время встречи')
                 ->render(fn(Meetup $meetup) => $meetup->presenter()->localizedDate())
+                ->filter(DateTimer::make()->format('Y-m-d'))
                 ->sort(),
 
             TD::make('actions', 'Действия')

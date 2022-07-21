@@ -77,7 +77,7 @@ class DatabaseSeeder extends Seeder
 
             Task::factory(5)
                 ->for($project)
-                ->hasAttached($employees->random())
+                ->for(User::employees()->get()->random())
                 ->create();
         }
     }

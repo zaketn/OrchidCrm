@@ -21,7 +21,7 @@ class MeetupListScreen extends Screen
     {
         return [
             'meetups' => Meetup::filters()
-                ->filtersApply([MeetupDateFilter::class, MeetupStatusFilter::class])
+                ->filtersApply([MeetupStatusFilter::class])
                 ->orderBy('date_time', 'desc')
                 ->paginate()
         ];

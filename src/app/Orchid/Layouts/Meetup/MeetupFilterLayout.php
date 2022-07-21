@@ -15,7 +15,6 @@ class MeetupFilterLayout extends Selection
     public function filters(): iterable
     {
         return [
-            MeetupDateFilter::class,
             MeetupStatusFilter::class,
         ];
     }

@@ -17,8 +17,6 @@ class LeadFilterLayout extends Selection
     {
         return [
             LeadStatusFilter::class,
-            LeadCompanyFilter::class,
-            LeadDateFilter::class
         ];
     }
 }

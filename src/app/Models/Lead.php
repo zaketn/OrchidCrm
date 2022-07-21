@@ -32,9 +32,9 @@ class Lead extends Model
     ];
 
     protected $allowedFilters = [
-        'id',
-        'status',
-        'desired_date'
+        'header',
+        'desired_date',
+        'status'
     ];
 
     public function presenter()

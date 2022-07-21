@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Orchid;
 
+use App\Models\Lead;
+use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
 use Orchid\Platform\Models\Role;
@@ -31,7 +33,7 @@ class PlatformProvider extends OrchidServiceProvider
         return [
             Menu::make('Заявки')
                 ->icon('envelope')
-                ->route('platform.leads')
+                ->route('platform.leads', ['filter' => ['status' => Lead::STATUS_PENDING]])
                 ->permission(['platform.leads', 'platform.leads.edit'])
                 ->title('Работа с клиентами'),
 
@@ -40,14 +42,16 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.meetups')
                 ->permission(['platform.meetups', 'platform.meetups.edit']),
 
-            Menu::make('Все задачи')
-                ->icon('book-open')
-                ->route('platform.tasks')
-                ->title('Задачи'),
-
-            Menu::make('Создать задачу')
-                ->icon('pencil')
-                ->route('platform.tasks.edit'),
+            Menu::make('Задачи')
+                ->icon('task')
+                ->route(
+                    'platform.tasks',
+                    Auth::user()->hasAccess('platform.tasks.edit')
+                        ? ['filter' => ['user_id' => Auth::id()]]
+                        : null
+                )
+                ->permission('platform.tasks')
+                ->title('Работа'),
 
             Menu::make(__('Users'))
                 ->icon('user')
@@ -85,10 +89,14 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.users', __('Users')),
 
             ItemPermission::group('Работа с клиентами')
-                ->addPermission('platform.leads','Просмотр заявок')
-                ->addPermission('platform.leads.edit','Просмотр и управление заявками')
+                ->addPermission('platform.leads', 'Просмотр заявок')
+                ->addPermission('platform.leads.edit', 'Просмотр и управление заявками')
                 ->addPermission('platform.meetups', 'Просмотр встреч')
                 ->addPermission('platform.meetups.edit', 'Просмотр и управление встречами'),
+
+            ItemPermission::group('Задачи')
+                ->addPermission('platform.tasks', 'Доступ к задачам')
+                ->addPermission('platform.tasks.edit', 'Управление задачами')
         ];
     }
 }

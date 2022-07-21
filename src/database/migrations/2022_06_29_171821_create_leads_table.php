@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->string('header', 64);
             $table->string('description', 1024);
-            $table->dateTime('desired_date');
+            $table->timestamp('desired_date');
             $table->string('status', 16);
             $table->string('employee_message', 128)->nullable();
             $table->timestamps();

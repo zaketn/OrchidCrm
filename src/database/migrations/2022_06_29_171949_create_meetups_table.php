@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('lead_id')->nullable()->constrained();
             $table->string('address', 128);
             $table->string('place', 128)->nullable();
-            $table->dateTime('date_time');
+            $table->timestamp('date_time');
             $table->timestamps();
         });
     }

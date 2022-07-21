@@ -11,8 +11,8 @@ use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Alert;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class MeetupEditScreen extends Screen
 {
@@ -56,12 +56,15 @@ class MeetupEditScreen extends Screen
             Button::make('Удалить')
                 ->method('delete')
                 ->canSee($this->meetup->exists)
+                ->confirm('Вы уверены, что хотите удалить встречу?')
                 ->icon('trash'),
 
             Button::make('Сохранить')
                 ->method('createOrUpdate')
-                ->icon('pencil')
-                ->canSee($this->meetup->exists),
+                ->canSee($this->meetup->exists)
+                ->confirm('Данные о встрече необходимо изменять, предварительно согласовав это со всеми её участниками.
+                Вы уверены, что хотите это сделать?')
+                ->icon('pencil'),
 
             Button::make('Создать')
                 ->method('createOrUpdate')
@@ -131,18 +134,19 @@ class MeetupEditScreen extends Screen
         $meetup->users()->detach();
         $meetup->delete();
 
-        Alert::success('Встреча успешно удалена');
+        Toast::success('Встреча успешно удалена');
 
         return redirect()->route('platform.meetups');
     }
 
     public function createOrUpdate(Meetup $meetup, Request $request)
     {
-        $meetup->fill($request->meetup)->save();
-        $meetup->users()->attach($request->meetup['employees']);
-        $meetup->users()->attach($request->meetup['customers']);
+        $meetupUsers = array_merge($request->meetup['employees'], $request->meetup['customers']);
 
-        Alert::success('Успешно!');
+        $meetup->fill($request->meetup)->save();
+        $meetup->users()->sync($meetupUsers);
+
+        Toast::success('Успешно!');
 
         return redirect()->route('platform.meetups');
     }
