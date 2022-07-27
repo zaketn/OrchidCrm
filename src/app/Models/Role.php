@@ -9,10 +9,14 @@ use Orchid\Access\RoleInterface;
 use Orchid\Filters\Filterable;
 use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
+use Orchid\Support\Facades\Dashboard;
 
 class Role extends Model implements RoleInterface
 {
     use RoleAccess, Filterable, AsSource, Chartable, HasFactory;
+
+    public const EMPLOYEES = ['cio', 'ceo', 'manager', 'agent', 'hl_dev', 'dev'];
+    public const CUSTOMERS = ['customer'];
 
     /**
      * @var string

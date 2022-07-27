@@ -11,6 +11,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -40,19 +41,19 @@ class TaskListLayout extends Table
                 )
                 ->sort(),
 
-            TD::make('header', 'Тема')
-                ->filter(Input::make()),
-
             TD::make('user_id', 'Сотрудник')
                 ->render(
-                    fn(Task $task) => $task->user->presenter()->fullName()
+                    fn(Task $task) => new Persona($task->user->presenter())
                 )
                 ->filter(
                     Select::make()
                         ->fromQuery(User::has('tasks'), 'name')
                         ->empty()
-                )
-                ->canSee(Auth::user()->hasAccess('platform.tasks.edit')),
+                ),
+
+            TD::make('header', 'Тема')
+                ->canSee(Auth::user()->hasAccess('platform.tasks.edit'))
+                ->filter(Input::make()),
 
             TD::make('project_id', 'Проект')
                 ->render(

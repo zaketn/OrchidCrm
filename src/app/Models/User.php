@@ -8,9 +8,6 @@ use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
-    public const ROLES_EMPLOYEES = ['cio', 'ceo', 'manager', 'agent', 'hl_dev', 'dev'];
-    public const ROLES_CUSTOMERS = ['customer'];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -54,7 +51,7 @@ class User extends Authenticatable
      */
     protected $allowedFilters = [
         'id',
-        'name',
+        'last_name',
         'email',
         'permissions',
     ];
@@ -66,7 +63,7 @@ class User extends Authenticatable
      */
     protected $allowedSorts = [
         'id',
-        'name',
+        'last_name',
         'email',
         'updated_at',
         'created_at',
@@ -119,12 +116,12 @@ class User extends Authenticatable
     public function scopeEmployees()
     {
         return $this->whereHas('roles', function (Builder $builder) {
-            $builder->whereIn('slug', $this::ROLES_EMPLOYEES);
+            $builder->whereIn('slug', Role::EMPLOYEES);
         });
     }
 
     public function isEmployee()
     {
-        return $this->roles()->whereIn('slug', $this::ROLES_EMPLOYEES)->exists();
+        return $this->roles()->whereIn('slug', Role::EMPLOYEES)->exists();
     }
 }

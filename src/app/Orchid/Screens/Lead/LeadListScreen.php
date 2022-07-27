@@ -20,9 +20,7 @@ class LeadListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'leads' => Lead::filters()->filtersApply([
-                LeadStatusFilter::class,
-            ])
+            'leads' => Lead::filters()
                 ->orderBy('desired_date', 'desc')
                 ->paginate()
         ];
@@ -63,7 +61,6 @@ class LeadListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            LeadFilterLayout::class,
             LeadListLayout::class,
         ];
     }

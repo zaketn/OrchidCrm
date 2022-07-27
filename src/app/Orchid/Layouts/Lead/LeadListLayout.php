@@ -9,6 +9,7 @@ use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -40,22 +41,22 @@ class LeadListLayout extends Table
 
             TD::make('header', 'Заголовок')->filter(Input::make()),
 
+            TD::make('company', 'Компания')
+                ->render(
+                    fn(Lead $lead) => $lead->user->company->name
+                ),
+
+            TD::make('user_id', 'Представитель')
+                ->render(
+                    fn(Lead $lead) => new Persona($lead->user->presenter())
+                ),
+
             TD::make('desired_date', 'Удобное время')
                 ->render(
                     fn(Lead $lead) => $lead->presenter()->localizedDate()
                 )
                 ->filter(DateTimer::make()->format('Y-m-d'))
                 ->sort(),
-
-            TD::make('company', 'Компания')
-                ->render(
-                    fn(Lead $lead) => $lead->user->company->name
-                ),
-
-            TD::make('user_id', 'Имя представителя')
-                ->render(
-                    fn(Lead $lead) => $lead->user->presenter()->fullName()
-                ),
 
             TD::make('status', 'Статус')
                 ->render(

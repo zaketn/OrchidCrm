@@ -33,6 +33,7 @@ class MeetupListLayout extends Table
         /**
          * TODO filter by customer
          * TODO filter by employee
+         * TODO improve display of customer and employee
          */
 
         return [

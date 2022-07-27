@@ -94,19 +94,24 @@ class LeadEditScreen extends Screen
                        ->required(),
 
                    Input::make('meetup.address')
-                       ->placeholder('ул. Тверская, 75')
-                       ->title('Адрес'),
+                       ->title('Адрес')
+                       ->help('Например: ул. Тверская, 75')
+                       ->type('text')
+                       ->max(128)
+                        ->required(),
 
                    Input::make('meetup.place')
                        ->title('Место встречи')
-                       ->placeholder('Кафе "Вкусные снеки" на первом этаже')
-                       ->help('Может быть пустым'),
+                       ->help('Например: Кафе "Вкусные снеки" на первом этаже')
+                       ->type('text')
+                       ->max('128'),
 
                    DateTimer::make('lead.desired_date')
                        ->title('Дата и время встречи')
                        ->enableTime()
                        ->disabled()
                        ->help('Выбрано заказчиком')
+                       ->required()
 
                ])
             ])

@@ -45,7 +45,6 @@ class UserFactory extends Factory
                 'last_name' => 'admin',
                 'middle_name' => 'admin',
                 'email' => 'admin@admin.com',
-                'permissions' => Dashboard::getAllowAllPermission()
             ];
         });
     }

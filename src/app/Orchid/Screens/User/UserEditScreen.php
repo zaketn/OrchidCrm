@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Orchid\Screens\User;
 
 use App\Orchid\Layouts\Role\RolePermissionLayout;
+use App\Orchid\Layouts\User\UserCompanyLayout;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
@@ -13,7 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\UserSwitch;
-use Orchid\Platform\Models\User;
+use App\Models\User;
 use Orchid\Screen\Action;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -40,7 +41,7 @@ class UserEditScreen extends Screen
         $user->load(['roles']);
 
         return [
-            'user'       => $user,
+            'user' => $user,
             'permission' => $user->getStatusPermission(),
         ];
     }
@@ -110,7 +111,18 @@ class UserEditScreen extends Screen
 
             Layout::block(UserEditLayout::class)
                 ->title(__('Profile Information'))
-                ->description(__('Update your account\'s profile information and email address.'))
+                ->description('Обновите информацию профиля аккаунта и дополнительные данные')
+                ->commands(
+                    Button::make(__('Save'))
+                        ->type(Color::DEFAULT())
+                        ->icon('check')
+                        ->canSee($this->user->exists)
+                        ->method('save')
+                ),
+
+            Layout::block(UserCompanyLayout::class)
+                ->title('Компания')
+                ->description('Укажите компанию, от чьей имени работает пользователь.')
                 ->commands(
                     Button::make(__('Save'))
                         ->type(Color::DEFAULT())
@@ -156,7 +168,7 @@ class UserEditScreen extends Screen
     }
 
     /**
-     * @param User    $user
+     * @param User $user
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -183,6 +195,7 @@ class UserEditScreen extends Screen
 
         $user
             ->fill($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray())
+            ->company()->associate($request->input('user.company'))
             ->fill(['permissions' => $permissions])
             ->save();
 
@@ -196,9 +209,9 @@ class UserEditScreen extends Screen
     /**
      * @param User $user
      *
-     * @throws \Exception
-     *
      * @return \Illuminate\Http\RedirectResponse
+     *
+     * @throws \Exception
      *
      */
     public function remove(User $user)
