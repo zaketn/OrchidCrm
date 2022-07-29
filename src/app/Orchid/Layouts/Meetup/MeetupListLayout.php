@@ -3,11 +3,14 @@
 namespace App\Orchid\Layouts\Meetup;
 
 use App\Models\Meetup;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
+use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
@@ -61,7 +64,7 @@ class MeetupListLayout extends Table
 
             TD::make('date_time', 'Дата и время встречи')
                 ->render(fn(Meetup $meetup) => $meetup->presenter()->localizedDate())
-                ->filter(DateTimer::make()->format('Y-m-d'))
+                ->filter(TD::FILTER_DATE)
                 ->sort(),
 
             TD::make('actions', 'Действия')

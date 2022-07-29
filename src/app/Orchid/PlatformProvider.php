@@ -33,7 +33,7 @@ class PlatformProvider extends OrchidServiceProvider
         return [
             Menu::make('Заявки')
                 ->icon('envelope')
-                ->route('platform.leads', ['filter' => ['status' => Lead::STATUS_PENDING]])
+                ->route('platform.leads', ['filter' => ['status' => [Lead::STATUS_PENDING]]])
                 ->permission(['platform.leads', 'platform.leads.edit'])
                 ->title('Работа с клиентами'),
 
@@ -88,15 +88,23 @@ class PlatformProvider extends OrchidServiceProvider
                 ->addPermission('platform.systems.roles', __('Roles'))
                 ->addPermission('platform.systems.users', __('Users')),
 
+            ItemPermission::group('Основное')
+                ->addPermission('platform.meetups', 'Просмотр встреч')
+                ->addPermission('platform.tasks', 'Доступ к задачам'),
+
             ItemPermission::group('Работа с клиентами')
                 ->addPermission('platform.leads', 'Просмотр заявок')
                 ->addPermission('platform.leads.edit', 'Просмотр и управление заявками')
-                ->addPermission('platform.meetups', 'Просмотр встреч')
                 ->addPermission('platform.meetups.edit', 'Просмотр и управление встречами'),
 
-            ItemPermission::group('Задачи')
-                ->addPermission('platform.tasks', 'Доступ к задачам')
+            ItemPermission::group('Повышенные полномочия')
                 ->addPermission('platform.tasks.edit', 'Управление задачами')
+                ->addPermission('platform.projects', 'Просмотр проектам'),
+
+            ItemPermission::group('Хранилище')
+                ->addPermission('platform.projects.edit', 'Управление проектами')
+                ->addPermission('platform.contracts', 'Просмотр договоров')
+                ->addPermission('platform.contracts.edit', 'Управление договорами'),
         ];
     }
 }

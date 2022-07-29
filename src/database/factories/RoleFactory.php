@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Orchid\Support\Facades\Dashboard;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Role>
@@ -30,7 +31,11 @@ class RoleFactory extends Factory
     public function ceo()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'Директор', 'slug' => 'ceo']
+            fn (array $attributes) => [
+                'name' => 'Директор',
+                'slug' => 'ceo',
+                'permissions' => Dashboard::getAllowAllPermission(),
+            ]
         );
     }
 
@@ -42,7 +47,11 @@ class RoleFactory extends Factory
     public function cio()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'IT-директор', 'slug' => 'cio']
+            fn (array $attributes) => [
+                'name' => 'IT-директор',
+                'slug' => 'cio',
+                'permissions' => Dashboard::getAllowAllPermission(['Основное', 'Повышенные полномочия', 'Хранилище']),
+            ]
         );
     }
 
@@ -54,7 +63,11 @@ class RoleFactory extends Factory
     public function manager()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'Менеджер', 'slug' => 'manager']
+            fn (array $attributes) => [
+                'name' => 'Менеджер',
+                'slug' => 'manager',
+                'permissions' => Dashboard::getAllowAllPermission(['Основное', 'Работа с клиентами', 'Повышенные полномочия']),
+            ]
         );
     }
 
@@ -66,19 +79,11 @@ class RoleFactory extends Factory
     public function agent()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'Агент', 'slug' => 'agent']
-        );
-    }
-
-    /**
-     * Define the accountant role
-     *
-     * @return RoleFactory
-     */
-    public function accountant()
-    {
-        return $this->state(
-            fn (array $attributes) => ['name' => 'Бухгалтер', 'slug' => 'accountant']
+            fn (array $attributes) => [
+                'name' => 'Агент',
+                'slug' => 'agent',
+                'permissions' => Dashboard::getAllowAllPermission(['Основное', 'Работа с клиентами']),
+            ]
         );
     }
 
@@ -90,7 +95,11 @@ class RoleFactory extends Factory
     public function hlDev()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'Старший разработчик', 'slug' => 'hl_dev']
+            fn (array $attributes) => [
+                'name' => 'Старший разработчик',
+                'slug' => 'hl_dev',
+                'permissions' => Dashboard::getAllowAllPermission(['Основное', 'Повышенные полномочия']),
+            ]
         );
     }
 
@@ -102,7 +111,11 @@ class RoleFactory extends Factory
     public function dev()
     {
         return $this->state(
-            fn (array $attributes) => ['name' => 'Разработчик', 'slug' => 'dev']
+            fn (array $attributes) => [
+                'name' => 'Разработчик',
+                'slug' => 'dev',
+                'permissions' => Dashboard::getAllowAllPermission(['Основное']),
+            ]
         );
     }
 

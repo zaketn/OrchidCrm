@@ -37,18 +37,16 @@ class DatabaseSeeder extends Seeder
 
         $managerRole = Role::factory()->manager()->create();
         $agentRole = Role::factory()->agent()->create();
-        $accountantRole = Role::factory()->accountant()->create();
         $hlDevRole = Role::factory()->hlDev()->create();
         $devRole = Role::factory()->dev()->create();
         $customerRole = Role::factory()->customer()->create();
 
         $managerUser = User::factory(3)->for($localCompany)->hasAttached($managerRole)->create();
         $agentUser = User::factory(3)->for($localCompany)->hasAttached($agentRole)->create();
-        $accountantUser = User::factory(2)->for($localCompany)->hasAttached($accountantRole)->create();
         $hlDevUser = User::factory(5)->for($localCompany)->hasAttached($hlDevRole)->create();
         $devUser = User::factory(10)->for($localCompany)->hasAttached($devRole)->create();
 
-        $employees = collect([$ceoUser, $cioUser, $managerUser, $agentUser, $accountantUser, $hlDevUser, $devUser]);
+        $employees = collect([$ceoUser, $cioUser, $managerUser, $agentUser, $hlDevUser, $devUser]);
 
         $customersAmount = 10;
 

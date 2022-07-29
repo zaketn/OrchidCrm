@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', fn() => view('index'))->name('index');
 
-Route::post('leads', [LeadController::class, 'store'])->name('leads.create');
+Route::post('leads', [LeadController::class, 'store'])
+    ->name('leads.create')
+    ->middleware('customer');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

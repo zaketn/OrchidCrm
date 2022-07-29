@@ -109,7 +109,7 @@ class User extends Authenticatable
     public function scopeCustomers()
     {
         return $this->whereHas('roles', function (Builder $builder) {
-            $builder->whereIn('slug', $this::ROLES_CUSTOMERS);
+            $builder->whereIn('slug', Role::CUSTOMERS);
         });
     }
 

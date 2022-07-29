@@ -28,7 +28,6 @@
                                 </td>
                                 <td class="{{ $project->presenter()->statusColor() }}">{{ $project->status }}</td>
                                 <td>
-                                    {{-- TODO contracts storage --}}
                                     <a href="#">Ссылка</a>
                                 </td>
                                 <td>{{ $project->presenter()->localizedDate() }}</td>
@@ -37,7 +36,7 @@
                         </tbody>
                     </table>
                 @else
-                    <h3 class="text-center text-secondary">Запланированных встреч пока нет.</h3>
+                    <h3 class="text-center text-secondary">Проектов пока нет.</h3>
                 @endif
             </div>
             <div class="modal-footer">

@@ -55,7 +55,7 @@ class LeadListLayout extends Table
                 ->render(
                     fn(Lead $lead) => $lead->presenter()->localizedDate()
                 )
-                ->filter(DateTimer::make()->format('Y-m-d'))
+                ->filter(TD::FILTER_DATE)
                 ->sort(),
 
             TD::make('status', 'Статус')
@@ -64,12 +64,11 @@ class LeadListLayout extends Table
                 )
                 ->sort()
                 ->filter(
-                    Select::make()
-                        ->options([
-                            Lead::STATUS_APPLIED => 'Принята',
-                            Lead::STATUS_DECLINED => 'Отклонена',
-                            Lead::STATUS_PENDING => 'На рассмотрении',
-                        ])
+                    TD::FILTER_SELECT, [
+                        Lead::STATUS_APPLIED => 'Принята',
+                        Lead::STATUS_DECLINED => 'Отклонена',
+                        Lead::STATUS_PENDING => 'На рассмотрении',
+                    ]
                 ),
 
             TD::make('actions', 'Действия')

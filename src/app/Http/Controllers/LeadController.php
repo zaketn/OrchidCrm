@@ -24,4 +24,3 @@ class LeadController extends Controller
         return redirect()->route('index');
     }
 }
-//TODO middleware that aren't allow employee leave a lead request
