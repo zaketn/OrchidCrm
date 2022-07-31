@@ -22,6 +22,6 @@ class CheckIfCustomer
         if(! Auth::user()->isEmployee())
             return $next($request);
 
-        return redirect(RouteServiceProvider::HOME);
+        abort(403);
     }
 }

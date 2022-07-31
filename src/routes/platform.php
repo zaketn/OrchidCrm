@@ -95,11 +95,50 @@ Route::screen('roles', RoleListScreen::class)
             ->push(__('Roles'), route('platform.systems.roles'));
     });
 
-Route::screen('leads', LeadListScreen::class)->name('platform.leads');
-Route::screen('leads/{lead}', LeadEditScreen::class)->name('platform.leads.edit');
+Route::screen('leads', LeadListScreen::class)
+    ->name('platform.leads')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push('Заявки', route('platform.leads'))
+    );
 
-Route::screen('meetups', MeetupListScreen::class)->name('platform.meetups');
-Route::screen('meetup/{meetup?}', MeetupEditScreen::class)->name('platform.meetups.edit');
+Route::screen('leads/{lead}', LeadEditScreen::class)
+    ->name('platform.leads.edit')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.leads')
+            ->push('Заявка')
+    );
 
-Route::screen('tasks', TaskListScreen::class)->name('platform.tasks');
-Route::screen('task/{task?}', TaskEditScreen::class)->name('platform.tasks.edit');
+Route::screen('meetups', MeetupListScreen::class)
+    ->name('platform.meetups')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push('Встречи', route('platform.meetups'))
+    );
+
+Route::screen('meetup/{meetup?}', MeetupEditScreen::class)
+    ->name('platform.meetups.edit')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.meetups')
+            ->push('Встреча', route('platform.meetups.edit'))
+    );
+
+Route::screen('tasks', TaskListScreen::class)
+    ->name('platform.tasks')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push('Задачи', route('platform.tasks'))
+    );
+
+Route::screen('task/{task?}', TaskEditScreen::class)
+    ->name('platform.tasks.edit')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.tasks')
+            ->push('Задача', route('platform.tasks.edit'))
+    );

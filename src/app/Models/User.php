@@ -14,6 +14,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'id',
         'name',
         'last_name',
         'middle_name',
@@ -79,6 +80,11 @@ class User extends Authenticatable
         $userRoles = $this->getRoles()->implode('name', ', ');
 
         return $this->attributes['last_name'].' '.$this->attributes['name'].' '.$this->attributes['middle_name'].' | ' . $userRoles;
+    }
+
+    public function getFirstAndLastNameAttribute() : string
+    {
+        return $this->attributes['last_name'].' '.$this->attributes['name'];
     }
 
     public function tasks()

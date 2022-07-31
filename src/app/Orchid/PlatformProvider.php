@@ -31,6 +31,11 @@ class PlatformProvider extends OrchidServiceProvider
     public function registerMainMenu(): array
     {
         return [
+            Menu::make('На сайт')
+                ->icon('arrow-left-circle')
+                ->active('false')
+                ->route('index'),
+
             Menu::make('Заявки')
                 ->icon('envelope')
                 ->route('platform.leads', ['filter' => ['status' => [Lead::STATUS_PENDING]]])

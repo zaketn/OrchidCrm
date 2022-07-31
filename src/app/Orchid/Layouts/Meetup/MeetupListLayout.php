@@ -3,16 +3,15 @@
 namespace App\Orchid\Layouts\Meetup;
 
 use App\Models\Meetup;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
-use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
+use Illuminate\Database\Eloquent\Collection;
 
 class MeetupListLayout extends Table
 {
@@ -36,7 +35,6 @@ class MeetupListLayout extends Table
         /**
          * TODO filter by customer
          * TODO filter by employee
-         * TODO improve display of customer and employee
          */
 
         return [
@@ -47,20 +45,18 @@ class MeetupListLayout extends Table
                 ->sort(),
 
             TD::make('users', 'Сотрудник')
-                ->render(
-                    fn(Meetup $meetup) => $meetup->employees()->get()->implode('last_name', ', ')
-                ),
+                ->render(function (Meetup $meetup) {
+                    return $this->groupPersons('Сотрудники', $meetup->employees()->get());
+                }),
 
             TD::make('customers', 'Заказчик')
                 ->render(
-                    fn(Meetup $meetup) => $meetup->customers()->get()->implode('last_name', ', ')
+                    fn(Meetup $meetup) => $this->groupPersons('Заказчики', $meetup->customers()->get())
                 ),
 
             TD::make('address', 'Адрес встречи')
                 ->filter(Input::make())
                 ->sort(),
-
-            TD::make('place', 'Место встречи'),
 
             TD::make('date_time', 'Дата и время встречи')
                 ->render(fn(Meetup $meetup) => $meetup->presenter()->localizedDate())
@@ -75,9 +71,33 @@ class MeetupListLayout extends Table
                         ->icon('options-vertical')
                         ->list([
                             Link::make('Просмотреть')->route('platform.meetups.edit', $meetup),
+                            Link::make('Относящаяся заявка')
+                                ->route('platform.leads.edit', $meetup->lead ?? '#')
+                                ->canSee($meetup->lead()->exists())
                         ]);
                 })
                 ->canSee(Auth::user()->hasAccess('platform.meetups.edit'))
         ];
+    }
+
+    /**
+     * Show modal window if meetup has more than one person.
+     *
+     * @param Collection $persons
+     * @param string $title
+     * @return ModalToggle|Persona
+     */
+    private function groupPersons(string $title, Collection $persons): Persona|ModalToggle
+    {
+        if ($persons->count() > 1) {
+            return ModalToggle::make($persons->implode('firstAndLastName', ', '))
+                ->modal('groupPersonsModal')
+                ->modalTitle($title)
+                ->asyncParameters([
+                    'users' => $persons
+                ]);
+        }
+        else
+            return new Persona($persons->first()->presenter());
     }
 }

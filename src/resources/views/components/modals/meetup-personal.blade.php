@@ -19,7 +19,7 @@
                         <tbody>
                         @foreach($user->meetups as $meetup)
                             <tr>
-                                <td>{{ $meetup->lead->header }}</td>
+                                <td>{{ $meetup->lead->header ?? '-' }}</td>
                                 <td>{{ $meetup->address }}</td>
                                 <td>
                                     {{ $meetup->place }}

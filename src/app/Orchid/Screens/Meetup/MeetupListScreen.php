@@ -3,12 +3,13 @@
 namespace App\Orchid\Screens\Meetup;
 
 use App\Models\Meetup;
-use App\Orchid\Filters\Meetup\MeetupDateFilter;
-use App\Orchid\Filters\Meetup\MeetupStatusFilter;
+use App\Models\User;
 use App\Orchid\Layouts\Meetup\MeetupFilterLayout;
 use App\Orchid\Layouts\Meetup\MeetupListLayout;
+use App\View\Components\PersonaMultiple;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
+use Orchid\Support\Facades\Layout;
 
 class MeetupListScreen extends Screen
 {
@@ -64,8 +65,19 @@ class MeetupListScreen extends Screen
     public function layout(): iterable
     {
         return [
+            Layout::modal('groupPersonsModal', Layout::component(PersonaMultiple::class))
+                ->withoutApplyButton()
+                ->async('asyncGetUsers'),
+
             MeetupFilterLayout::class,
             MeetupListLayout::class,
+        ];
+    }
+
+    public function asyncGetUsers($users): iterable
+    {
+        return [
+            'users' => collect($users)->mapInto(User::class)
         ];
     }
 

@@ -56,4 +56,9 @@ class Lead extends Model
     {
         return $this->hasOne(Contract::class);
     }
+
+    public function isProcessed() : bool
+    {
+        return $this->status == $this::STATUS_PENDING;
+    }
 }

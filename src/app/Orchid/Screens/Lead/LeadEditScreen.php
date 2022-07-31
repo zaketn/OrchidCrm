@@ -6,6 +6,7 @@ use App\Models\Lead;
 use App\Models\Meetup;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
@@ -53,12 +54,18 @@ class LeadEditScreen extends Screen
             ModalToggle::make('Отклонить')
                 ->modal('declineModal')
                 ->method('decline')
-                ->icon('ban'),
+                ->icon('ban')
+                ->canSee($this->lead->isProcessed()),
 
             ModalToggle::make('Принять')
                 ->modal('applyModal')
                 ->icon('check')
-                ->method('apply'),
+                ->method('apply')
+                ->canSee($this->lead->isProcessed()),
+
+            Link::make($this->lead->presenter()->localizedStatus())
+                ->icon($this->lead->status == $this->lead::STATUS_APPLIED ? 'check' : 'ban')
+                ->canSee(! $this->lead->isProcessed())
         ];
     }
 
