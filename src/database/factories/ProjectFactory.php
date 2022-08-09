@@ -2,10 +2,8 @@
 
 namespace Database\Factories;
 
-use App\Models\Company;
 use App\Models\Contract;
 use App\Models\Project;
-use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -25,7 +23,6 @@ class ProjectFactory extends Factory
             Project::STATUS_STARTED,
             Project::STATUS_FINISHED,
             Project::STATUS_CANCELLED,
-            Project::STATUS_DEV,
             Project::STATUS_STOPPED
         ]);
 

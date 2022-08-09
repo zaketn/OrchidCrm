@@ -141,6 +141,11 @@ class MeetupEditScreen extends Screen
 
     public function createOrUpdate(Meetup $meetup, Request $request)
     {
+        $request->validate([
+            'meetup.address' => 'required|between:0,128',
+            'meetup.place' => 'between:0,128',
+        ]);
+
         $meetupUsers = array_merge($request->meetup['employees'], $request->meetup['customers']);
 
         $meetup->fill($request->meetup)->save();

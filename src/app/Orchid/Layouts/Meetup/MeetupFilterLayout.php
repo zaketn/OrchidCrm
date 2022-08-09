@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Layouts\Meetup;
 
+use App\Orchid\Filters\AttachedUserFilter;
 use App\Orchid\Filters\Meetup\MeetupDateFilter;
 use App\Orchid\Filters\Meetup\MeetupStatusFilter;
 use Orchid\Filters\Filter;
@@ -16,6 +17,7 @@ class MeetupFilterLayout extends Selection
     {
         return [
             MeetupStatusFilter::class,
+            AttachedUserFilter::class,
         ];
     }
 }

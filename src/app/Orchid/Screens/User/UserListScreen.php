@@ -112,9 +112,17 @@ class UserListScreen extends Screen
     public function saveUser(Request $request, User $user): void
     {
         $request->validate([
+            'user.name' => 'required|between:2,255',
+            'user.last_name' => 'required|between:2,255',
+            'user.middle_name' => 'required|between:2,255',
             'user.email' => [
                 'required',
                 Rule::unique(User::class, 'email')->ignore($user),
+            ],
+            'user.phone' => [
+                'required',
+                'between:5,32',
+                Rule::unique(User::class, 'phone')->ignore($user),
             ],
         ]);
 

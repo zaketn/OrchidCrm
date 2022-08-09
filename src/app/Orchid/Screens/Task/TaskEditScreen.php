@@ -153,6 +153,10 @@ class TaskEditScreen extends Screen
 
     public function createOrUpdate(Request $request, Task $task)
     {
+        $request->validate([
+            'task.header' => 'required|between:0,128',
+            'task.description' => 'required|between:0,2048'
+        ]);
         $task->fill($request->task)->save();
 
         Toast::success('Задача успешно сохранена.');

@@ -32,11 +32,6 @@ class MeetupListLayout extends Table
      */
     protected function columns(): iterable
     {
-        /**
-         * TODO filter by customer
-         * TODO filter by employee
-         */
-
         return [
             TD::make('id', '#')
                 ->render(

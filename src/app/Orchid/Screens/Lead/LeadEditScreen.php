@@ -163,6 +163,10 @@ class LeadEditScreen extends Screen
 
     public function decline(Lead $lead, Request $request)
     {
+        $request->validate([
+            'lead.employee_message' => 'required|between:0,128',
+        ]);
+
         $lead->status = $lead::STATUS_DECLINED;
         $lead->employee_message = $request->lead['employee_message'];
         $lead->save();
@@ -174,6 +178,11 @@ class LeadEditScreen extends Screen
 
     public function apply(Lead $lead, Request $request)
     {
+        $request->validate([
+            'meetup.address' => 'required|between:0,128',
+            'meetup.place' => 'between:0,128',
+        ]);
+
         $meetup = Meetup::create([
             'user_id' => $request->meetup['user_id'],
             'address' => $request->meetup['address'],
