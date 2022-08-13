@@ -30,7 +30,7 @@
                                 <td>
                                     <a href="#">Ссылка</a>
                                 </td>
-                                <td>{{ $project->presenter()->localizedDate() }}</td>
+                                <td>{{ datetime_format($project->created_at) }}</td>
                             </tr>
                         @endforeach
                         </tbody>

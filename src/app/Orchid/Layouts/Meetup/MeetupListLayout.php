@@ -54,7 +54,7 @@ class MeetupListLayout extends Table
                 ->sort(),
 
             TD::make('date_time', 'Дата и время встречи')
-                ->render(fn(Meetup $meetup) => $meetup->presenter()->localizedDate())
+                ->render(fn(Meetup $meetup) => datetime_format($meetup->date_time))
                 ->filter(TD::FILTER_DATE)
                 ->sort(),
 

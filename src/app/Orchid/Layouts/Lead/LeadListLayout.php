@@ -53,7 +53,7 @@ class LeadListLayout extends Table
 
             TD::make('desired_date', 'Удобное время')
                 ->render(
-                    fn(Lead $lead) => $lead->presenter()->localizedDate()
+                    fn(Lead $lead) => datetime_format($lead->desired_date)
                 )
                 ->filter(TD::FILTER_DATE)
                 ->sort(),

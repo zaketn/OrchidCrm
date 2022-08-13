@@ -24,7 +24,7 @@
                                 <td>
                                     {{ $meetup->place }}
                                 </td>
-                                <td>{{ $meetup->presenter()->localizedDate() }}</td>
+                                <td>{{ datetime_format($meetup->date_time) }}</td>
                             </tr>
                         @endforeach
                         </tbody>

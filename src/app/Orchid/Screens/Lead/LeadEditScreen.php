@@ -185,6 +185,7 @@ class LeadEditScreen extends Screen
 
         $meetup = Meetup::create([
             'user_id' => $request->meetup['user_id'],
+            'lead_id' => $request->lead['id'],
             'address' => $request->meetup['address'],
             'place' => $request->meetup['place'],
             'date_time' => $request->lead['desired_date']

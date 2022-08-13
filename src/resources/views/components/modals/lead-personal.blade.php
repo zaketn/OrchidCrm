@@ -22,7 +22,7 @@
                                 <td class="{{ $lead->presenter()->statusColor() }}">
                                     {{ $lead->presenter()->localizedStatus() }}
                                 </td>
-                                <td>{{ $lead->presenter()->localizedDate() }}</td>
+                                <td>{{ datetime_format($lead->desired_date) }}</td>
                             </tr>
                         @endforeach
                         </tbody>

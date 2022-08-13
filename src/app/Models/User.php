@@ -77,9 +77,7 @@ class User extends Authenticatable
 
     public function getFullNameAttribute() : string
     {
-        $userRoles = $this->getRoles()->implode('name', ', ');
-
-        return $this->attributes['last_name'].' '.$this->attributes['name'].' '.$this->attributes['middle_name'].' | ' . $userRoles;
+        return $this->presenter()->fullName(). ' | ' . $this->presenter()->subTitle();
     }
 
     public function getFirstAndLastNameAttribute() : string

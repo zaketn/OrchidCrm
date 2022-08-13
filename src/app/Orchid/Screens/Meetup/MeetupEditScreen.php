@@ -7,6 +7,7 @@ use App\Models\Meetup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
@@ -53,6 +54,11 @@ class MeetupEditScreen extends Screen
     public function commandBar(): iterable
     {
         return [
+            Link::make('Относящаяся заявка')
+                ->icon('envelope')
+                ->route('platform.leads.edit', $this->meetup->lead)
+                ->canSee($this->meetup->exists),
+
             Button::make('Удалить')
                 ->method('delete')
                 ->canSee($this->meetup->exists)
@@ -69,7 +75,7 @@ class MeetupEditScreen extends Screen
             Button::make('Создать')
                 ->method('createOrUpdate')
                 ->icon('note')
-                ->canSee(!$this->meetup->exists),
+                ->canSee(! $this->meetup->exists),
         ];
     }
 

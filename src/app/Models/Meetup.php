@@ -34,11 +34,6 @@ class Meetup extends Model
         'date_time',
     ];
 
-    public function presenter()
-    {
-        return new MeetupPresenter($this);
-    }
-
     public function lead()
     {
         return $this->belongsTo(Lead::class);
