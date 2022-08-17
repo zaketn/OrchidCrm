@@ -19,8 +19,8 @@
                         @foreach($user->leads as $lead)
                             <tr>
                                 <td>{{ $lead->header }}</td>
-                                <td class="{{ $lead->presenter()->statusColor() }}">
-                                    {{ $lead->presenter()->localizedStatus() }}
+                                <td>
+                                    {!! $lead->presenter()->localizedStatus() !!}
                                 </td>
                                 <td>{{ datetime_format($lead->desired_date) }}</td>
                             </tr>

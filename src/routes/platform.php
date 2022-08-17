@@ -7,6 +7,8 @@ use App\Orchid\Screens\Lead\LeadListScreen;
 use App\Orchid\Screens\Meetup\MeetupEditScreen;
 use App\Orchid\Screens\Meetup\MeetupListScreen;
 use App\Orchid\Screens\PlatformScreen;
+use App\Orchid\Screens\Project\ProjectEditScreen;
+use App\Orchid\Screens\Project\ProjectListScreen;
 use App\Orchid\Screens\Role\RoleEditScreen;
 use App\Orchid\Screens\Role\RoleListScreen;
 use App\Orchid\Screens\Task\TaskEditScreen;
@@ -141,4 +143,20 @@ Route::screen('task/{task?}', TaskEditScreen::class)
         fn(Trail $trail) => $trail
             ->parent('platform.tasks')
             ->push('Задача', route('platform.tasks.edit'))
+    );
+
+Route::screen('projects', ProjectListScreen::class)
+    ->name('platform.projects')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.index')
+            ->push('Проекты', 'platform.projects')
+    );
+
+Route::screen('project/{project?}', ProjectEditScreen::class)
+    ->name('platform.projects.edit')
+    ->breadcrumbs(
+        fn(Trail $trail) => $trail
+            ->parent('platform.projects')
+            ->push('Изменение проекта', 'platform.projects.edit')
     );

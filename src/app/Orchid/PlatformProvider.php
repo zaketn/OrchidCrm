@@ -8,10 +8,8 @@ use App\Models\Lead;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Platform\Dashboard;
 use Orchid\Platform\ItemPermission;
-use Orchid\Platform\Models\Role;
 use Orchid\Platform\OrchidServiceProvider;
 use Orchid\Screen\Actions\Menu;
-use Orchid\Support\Color;
 
 class PlatformProvider extends OrchidServiceProvider
 {
@@ -34,7 +32,8 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make('На сайт')
                 ->icon('arrow-left-circle')
                 ->active('false')
-                ->route('index'),
+                ->route('index')
+                ->target('_blank'),
 
             Menu::make('Заявки')
                 ->icon('envelope')
@@ -57,6 +56,12 @@ class PlatformProvider extends OrchidServiceProvider
                 )
                 ->permission('platform.tasks')
                 ->title('Работа'),
+
+            Menu::make('Проекты')
+                ->icon('docs')
+                ->route('platform.projects')
+                ->permission('platform.projects')
+                ->title('Проекты'),
 
             Menu::make(__('Users'))
                 ->icon('user')
@@ -104,7 +109,7 @@ class PlatformProvider extends OrchidServiceProvider
 
             ItemPermission::group('Повышенные полномочия')
                 ->addPermission('platform.tasks.edit', 'Управление задачами')
-                ->addPermission('platform.projects', 'Просмотр проектам'),
+                ->addPermission('platform.projects', 'Просмотр проектов'),
 
             ItemPermission::group('Хранилище')
                 ->addPermission('platform.projects.edit', 'Управление проектами')

@@ -6,12 +6,9 @@ use App\Models\Meetup;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Actions\DropDown;
 use Orchid\Screen\Actions\Link;
-use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Layouts\Persona;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
-use Illuminate\Database\Eloquent\Collection;
 
 class MeetupListLayout extends Table
 {
@@ -41,12 +38,12 @@ class MeetupListLayout extends Table
 
             TD::make('users', 'Сотрудник')
                 ->render(function (Meetup $meetup) {
-                    return $this->groupPersons('Сотрудники', $meetup->employees()->get());
+                    return group_persons('Сотрудники', $meetup->employees()->get());
                 }),
 
             TD::make('customers', 'Заказчик')
                 ->render(
-                    fn(Meetup $meetup) => $this->groupPersons('Заказчики', $meetup->customers()->get())
+                    fn(Meetup $meetup) => group_persons('Заказчики', $meetup->customers()->get())
                 ),
 
             TD::make('address', 'Адрес встречи')
@@ -73,26 +70,5 @@ class MeetupListLayout extends Table
                 })
                 ->canSee(Auth::user()->hasAccess('platform.meetups.edit'))
         ];
-    }
-
-    /**
-     * Show modal window if meetup has more than one person.
-     *
-     * @param Collection $persons
-     * @param string $title
-     * @return ModalToggle|Persona
-     */
-    private function groupPersons(string $title, Collection $persons): Persona|ModalToggle
-    {
-        if ($persons->count() > 1) {
-            return ModalToggle::make($persons->implode('firstAndLastName', ', '))
-                ->modal('groupPersonsModal')
-                ->modalTitle($title)
-                ->asyncParameters([
-                    'users' => $persons
-                ]);
-        }
-        else
-            return new Persona($persons->first()->presenter());
     }
 }

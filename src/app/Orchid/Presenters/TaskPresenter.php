@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Presenters;
 
+use App\Models\Task;
 use Illuminate\Support\Carbon;
 use Orchid\Support\Presenter;
 
@@ -21,5 +22,15 @@ class TaskPresenter extends Presenter
             'parts' => 4,
             'join' => ', ',
         ]);
+    }
+
+    public function coloredDotsBeforeStatus()
+    {
+        return match ($this->entity->status) {
+            Task::STATUS_STARTED => '<i class="text-primary">●</i> '.$this->entity->status,
+            Task::STATUS_CREATED => '<i class="text-warning">●</i> '.$this->entity->status,
+            Task::STATUS_FINISHED => '<i class="text-success">●</i> '.$this->entity->status,
+            default => '',
+        };
     }
 }

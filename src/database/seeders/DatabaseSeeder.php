@@ -10,7 +10,6 @@ use App\Models\Project;
 use App\Models\Role;
 use App\Models\Task;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -43,14 +42,13 @@ class DatabaseSeeder extends Seeder
 
         $managerUser = User::factory(3)->for($localCompany)->hasAttached($managerRole)->create();
         $agentUser = User::factory(3)->for($localCompany)->hasAttached($agentRole)->create();
-        $hlDevUser = User::factory(5)->for($localCompany)->hasAttached($hlDevRole)->create();
-        $devUser = User::factory(10)->for($localCompany)->hasAttached($devRole)->create();
-
-        $employees = collect([$ceoUser, $cioUser, $managerUser, $agentUser, $hlDevUser, $devUser]);
 
         $customersAmount = 10;
 
         for ($i = 0; $i < $customersAmount; $i++) {
+            $hlDevUser = User::factory()->for($localCompany)->hasAttached($hlDevRole)->create();
+            $devUser = User::factory(3)->for($localCompany)->hasAttached($devRole)->create();
+
             $company = Company::factory()->create();
 
             $customerUser = User::factory()
@@ -69,8 +67,11 @@ class DatabaseSeeder extends Seeder
             $contract = Contract::factory()->for($company)->create();
 
             $project = Project::factory()
-                ->for($customerUser)
                 ->for($contract)
+                ->hasAttached($hlDevUser)
+                ->hasAttached($devUser)
+                ->hasAttached($agentUser->random())
+                ->hasAttached($customerUser)
                 ->create();
 
             Task::factory(5)

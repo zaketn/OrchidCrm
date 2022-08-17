@@ -16,24 +16,10 @@ class LeadPresenter extends Presenter
     public function localizedStatus(): string
     {
         return match ($this->entity->status) {
-            Lead::STATUS_APPLIED => 'Одобрена',
-            Lead::STATUS_DECLINED => 'Отклонена',
-            Lead::STATUS_PENDING => 'На рассмотрении',
+            Lead::STATUS_APPLIED => '<i class="text-success">●</i> Одобрена',
+            Lead::STATUS_DECLINED => '<i class="text-danger">●</i> Отклонена',
+            Lead::STATUS_PENDING => '<i class="text-warning">●</i> На рассмотрении',
             default => '',
-        };
-    }
-
-    /**
-     * Return bootstrap text color class according to status
-     *
-     * @return string
-     */
-    public function statusColor() : string {
-        return match ($this->entity->status) {
-            Lead::STATUS_PENDING => 'text-warning',
-            Lead::STATUS_DECLINED => 'text-danger',
-            Lead::STATUS_APPLIED => 'text-success',
-            default => 'text-black',
         };
     }
 }

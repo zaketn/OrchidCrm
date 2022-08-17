@@ -27,16 +27,18 @@ class TaskEditScreen extends Screen
      */
     public function query(Task $task): iterable
     {
-        return [
+        $query = [
             'task' => $task,
-
-            'metrics' => [
-                'startDate' => $task->presenter()->localizedDate('start_date'),
-                'endDate' => $task->presenter()->localizedDate('end_date'),
-                'runtime' => $task->runtime,
-                'status' => $task->status,
-            ]
         ];
+
+        ! $task->exists ?: $query['metrics'] =  [
+            'startDate' => datetime_format($task->start_date),
+            'endDate' => datetime_format($task->end_date),
+            'runtime' => $task->runtime,
+            'status' => $task->status,
+        ];
+
+        return $query;
     }
 
     /**
@@ -100,15 +102,7 @@ class TaskEditScreen extends Screen
      */
     public function layout(): iterable
     {
-        return [
-            Layout::metrics([
-                'Статус' => 'metrics.status',
-                'Начало выполнения' => 'metrics.startDate',
-                'Конец выполнения' => 'metrics.endDate',
-                'Время выполнения' => 'metrics.runtime',
-            ])
-                ->canSee($this->task->exists),
-
+        $layout =  [
             Layout::rows([
                 Relation::make('task.project_id')
                     ->title('Проект')
@@ -149,6 +143,17 @@ class TaskEditScreen extends Screen
                     ->required(),
             ]),
         ];
+
+        ! $this->task->exists ?: array_unshift(
+            $layout,
+            Layout::metrics([
+                'Статус' => 'metrics.status',
+                'Начало выполнения' => 'metrics.startDate',
+                'Конец выполнения' => 'metrics.endDate',
+                'Время выполнения' => 'metrics.runtime',
+            ]));
+
+        return $layout;
     }
 
     public function createOrUpdate(Request $request, Task $task)

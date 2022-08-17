@@ -159,6 +159,6 @@ class MeetupEditScreen extends Screen
 
         Toast::success('Успешно!');
 
-        return redirect()->route('platform.meetups');
+        return redirect()->route('platform.meetups.edit', $meetup);
     }
 }

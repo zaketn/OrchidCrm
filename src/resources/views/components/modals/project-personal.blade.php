@@ -26,7 +26,9 @@
                                 <td>
                                     <a href="{{ $project->repo_link }}">Ссылка</a>
                                 </td>
-                                <td class="{{ $project->presenter()->statusColor() }}">{{ $project->status }}</td>
+                                <td>
+                                    {!! $project->presenter()->localizedStatus() !!}
+                                </td>
                                 <td>
                                     <a href="#">Ссылка</a>
                                 </td>

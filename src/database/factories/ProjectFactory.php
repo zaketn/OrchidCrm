@@ -27,7 +27,6 @@ class ProjectFactory extends Factory
         ]);
 
         return [
-            'user_id' => User::factory(),
             'contract_id' => Contract::factory(),
             'name' => fake()->unique()->lexify('Project ??????'),
             'status' => $statuses->random(),

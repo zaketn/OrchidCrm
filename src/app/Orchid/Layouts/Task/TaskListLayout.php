@@ -67,17 +67,20 @@ class TaskListLayout extends Table
 
             TD::make('created_at', 'Назначена')
                 ->render(
-                    fn(Task $task) => $task->presenter()->localizedDate('created_at')
+                    fn(Task $task) => datetime_format($task->created_at)
                 )
                 ->sort()
                 ->filter(DateTimer::make()->format('Y-m-d')),
 
             TD::make('deadline', 'Крайний срок')
                 ->render(
-                    fn(Task $task) => $task->presenter()->localizedDate('deadline')
+                    fn(Task $task) => datetime_format($task->deadline)
                 ),
 
-            TD::make('status', 'Статус'),
+            TD::make('status', 'Статус')
+                ->render(
+                    fn(Task $task) => $task->presenter()->coloredDotsBeforeStatus()
+                ),
 
             TD::make('Действия')
                 ->render(function (Task $task) {
