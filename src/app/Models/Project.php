@@ -6,13 +6,15 @@ use App\Orchid\Presenters\ProjectPresenter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Orchid\Attachment\Attachable;
+use Orchid\Attachment\Models\Attachment;
 use Orchid\Filters\Filterable;
 use Orchid\Metrics\Chartable;
 use Orchid\Screen\AsSource;
 
 class Project extends Model
 {
-    use HasFactory, AsSource, Filterable, Chartable;
+    use HasFactory, AsSource, Attachable, Filterable, Chartable;
 
     public const STATUS_STARTED = 'started';
     public const STATUS_FINISHED = 'finished';
@@ -38,7 +40,7 @@ class Project extends Model
 
     public function contract()
     {
-        return $this->belongsTo(Contract::class);
+        return $this->hasOne(Attachment::class, 'id', 'contract')->withDefault();
     }
 
     public function tasks()

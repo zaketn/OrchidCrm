@@ -59,9 +59,15 @@ class ProjectListLayout extends Table
                     fn(Project $project) => Link::make('Ссылка')->href($project->repo_link)->target('_blank')
                 ),
 
+            //TODO contracts factory
+
             TD::make('contract', 'Договор')
                 ->render(
-                    fn(Project $project) => Link::make('Договор № '.$project->contract->id)
+                    fn(Project $project) => $project->contract()->first()
+                        ? Link::make('Скачать')
+                            ->href($project->contract()->first()->url())
+                            ->target('_blank')
+                        : '-'
                 ),
 
             TD::make('created_at', 'Создан')

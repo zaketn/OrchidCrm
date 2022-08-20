@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Company;
-use App\Models\Contract;
 use App\Models\Lead;
 use App\Models\Meetup;
 use App\Models\Project;
@@ -64,10 +63,7 @@ class DatabaseSeeder extends Seeder
                 ->hasAttached($agentUser->random())
                 ->create();
 
-            $contract = Contract::factory()->for($company)->create();
-
             $project = Project::factory()
-                ->for($contract)
                 ->hasAttached($hlDevUser)
                 ->hasAttached($devUser)
                 ->hasAttached($agentUser->random())

@@ -30,7 +30,11 @@
                                     {!! $project->presenter()->localizedStatus() !!}
                                 </td>
                                 <td>
-                                    <a href="#">Ссылка</a>
+                                    @if($contract = $project->contract()->first())
+                                        <a href="{{ $contract->url() }}">Скачать</a>
+                                    @else
+                                        <span>-</span>
+                                    @endif
                                 </td>
                                 <td>{{ datetime_format($project->created_at) }}</td>
                             </tr>

@@ -2,9 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\Contract;
 use App\Models\Project;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -27,7 +25,6 @@ class ProjectFactory extends Factory
         ]);
 
         return [
-            'contract_id' => Contract::factory(),
             'name' => fake()->unique()->lexify('Project ??????'),
             'status' => $statuses->random(),
             'repo_link' => fake()->unique()->url()

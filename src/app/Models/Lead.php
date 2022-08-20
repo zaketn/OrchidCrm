@@ -52,11 +52,6 @@ class Lead extends Model
         return $this->hasMany(Meetup::class);
     }
 
-    public function contract()
-    {
-        return $this->hasOne(Contract::class);
-    }
-
     public function isProcessed() : bool
     {
         return $this->status == $this::STATUS_PENDING;

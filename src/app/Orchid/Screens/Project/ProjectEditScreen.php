@@ -10,6 +10,7 @@ use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
@@ -84,12 +85,13 @@ class ProjectEditScreen extends Screen
                 Select::make('project.status')
                     ->title('Статус')
                     ->options([
-                        Project::STATUS_STOPPED => 'Приостановлен',
                         Project::STATUS_STARTED => 'В разработке',
+                        Project::STATUS_STOPPED => 'Приостановлен',
                         Project::STATUS_FINISHED => 'Завершен',
                         Project::STATUS_CANCELLED => 'Отменен',
                     ])
-                    ->required(),
+                    ->required()
+                    ->canSee($this->project->exists),
 
                 Relation::make('project.customers')
                     ->title('Заказчики')
@@ -112,28 +114,42 @@ class ProjectEditScreen extends Screen
                 Input::make('project.repo_link')
                     ->title('Ссылка на репозиторий')
                     ->required(),
+
+                Upload::make($this->project->exists ? 'project.contract' : 'upload')
+                    ->maxFiles(1)
+                    ->acceptedFiles('application/pdf')
+                    ->title('Договор')
             ]),
         ];
 
-        ! $this->project->exists ?: $layout[] = EmployeesRolesByProject::class;
+        if($this->project->exists)
+            $layout[] = EmployeesRolesByProject::class;
 
         return $layout;
     }
 
     public function createOrUpdate(Project $project, Request $request)
     {
+//    TODO validate unique fields
         $request->validate([
             'project.name' => 'required|string|between:1,64',
-            'project.status' => 'required',
             'project.repo_link' => 'required|between:1,128',
             'project.employees' => 'required|exists:users,id',
             'project.customers' => 'required|exists:users,id',
         ]);
 
         $projectUsers = array_merge($request->project['customers'], $request->project['employees']);
+        $contractInput = $project->exists ? 'project.contract' : 'upload';
 
-        $project->fill($request->project)->save();
+        $project->fill($request->project);
+        $project->contract = $request->input($contractInput)[0];
+        $project->save();
+
         $project->users()->sync($projectUsers);
+
+        $project->attachment()->syncWithoutDetaching(
+            $request->input($contractInput, [])
+        );
 
         Toast::success('Успешно!');
 
