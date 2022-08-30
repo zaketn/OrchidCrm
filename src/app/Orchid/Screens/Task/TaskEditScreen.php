@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Task;
 use App\Models\Project;
 use App\Models\Task;
 use App\Models\User;
+use App\Notifications\NewTask;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Orchid\Screen\Fields\DateTimer;
@@ -162,7 +163,13 @@ class TaskEditScreen extends Screen
             'task.header' => 'required|between:0,128',
             'task.description' => 'required|between:0,2048'
         ]);
+
+        $taskExists = $task->exists;
         $task->fill($request->task)->save();
+
+        if(! $taskExists){
+            User::find($task->user->id)->notify(new NewTask($task));
+        }
 
         Toast::success('Задача успешно сохранена.');
 

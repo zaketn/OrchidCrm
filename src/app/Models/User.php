@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Orchid\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\Notifiable;
 use Orchid\Platform\Models\User as Authenticatable;
 
 class User extends Authenticatable
 {
+    use Notifiable;
     /**
      * The attributes that are mass assignable.
      *
@@ -127,5 +129,19 @@ class User extends Authenticatable
     public function isEmployee()
     {
         return $this->roles()->whereIn('slug', Role::EMPLOYEES)->exists();
+    }
+
+    public function finishedTasks()
+    {
+        $tasks = $this->tasks()->get();
+
+        return $tasks->where('status', Task::STATUS_FINISHED);
+    }
+
+    public function pendingTasks()
+    {
+        $tasks = $this->tasks()->get();
+
+        return $tasks->where('status', Task::STATUS_CREATED);
     }
 }

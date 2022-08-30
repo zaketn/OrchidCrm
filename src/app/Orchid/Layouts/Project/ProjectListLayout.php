@@ -45,7 +45,7 @@ class ProjectListLayout extends Table
 
             TD::make('status', 'Статус')
                 ->render(
-                    fn(Project $project) => $project->presenter()->localizedStatus()
+                    fn(Project $project) => $project->presenter()->localizedStatus(true)
                 )
                 ->filter(TD::FILTER_SELECT, [
                     Project::STATUS_CANCELLED => 'Отменен',
@@ -59,11 +59,9 @@ class ProjectListLayout extends Table
                     fn(Project $project) => Link::make('Ссылка')->href($project->repo_link)->target('_blank')
                 ),
 
-            //TODO contracts factory
-
             TD::make('contract', 'Договор')
                 ->render(
-                    fn(Project $project) => $project->contract()->first()
+                    fn(Project $project) => ($project->contract()->first())
                         ? Link::make('Скачать')
                             ->href($project->contract()->first()->url())
                             ->target('_blank')

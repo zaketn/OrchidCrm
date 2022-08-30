@@ -12,7 +12,7 @@ class Task extends Model
 {
     use HasFactory, AsSource, Filterable;
 
-    public const STATUS_CREATED = 'Создана';
+    public const STATUS_CREATED = 'Ожидает выполнения';
     public const STATUS_STARTED = 'Начата';
     public const STATUS_FINISHED = 'Завершена';
 

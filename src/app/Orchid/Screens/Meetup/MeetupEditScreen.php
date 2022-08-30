@@ -5,7 +5,9 @@ namespace App\Orchid\Screens\Meetup;
 use App\Models\Lead;
 use App\Models\Meetup;
 use App\Models\User;
+use App\Notifications\ArrangedMeetup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\DateTimer;
@@ -56,7 +58,7 @@ class MeetupEditScreen extends Screen
         return [
             Link::make('Относящаяся заявка')
                 ->icon('envelope')
-                ->route('platform.leads.edit', $this->meetup->lead)
+                ->route('platform.leads.edit', $this->meetup->lead ?? '#')
                 ->canSee($this->meetup->exists),
 
             Button::make('Удалить')
@@ -153,10 +155,12 @@ class MeetupEditScreen extends Screen
         ]);
 
         $meetupUsers = array_merge($request->meetup['employees'], $request->meetup['customers']);
+        $newMeetupUsers = collect($meetupUsers)->diff($meetup->users->pluck('id'));
 
         $meetup->fill($request->meetup)->save();
         $meetup->users()->sync($meetupUsers);
 
+        Notification::send(User::whereIn('id', $newMeetupUsers)->get(), (new ArrangedMeetup($meetup)));
         Toast::success('Успешно!');
 
         return redirect()->route('platform.meetups.edit', $meetup);

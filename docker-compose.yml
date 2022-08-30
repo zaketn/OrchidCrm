@@ -4,13 +4,14 @@ services:
   web:
     build:
       context: .
-      dockerfile: web.Dockerfile
+      dockerfile: web/web.Dockerfile
     user: 1000:1000
     container_name: web
     ports:
       - 8000:80
     volumes:
       - ./src:/var/www/html
+      - ./web/increase-upload-size.ini:/usr/local/etc/php/conf.d/increase-upload-size.ini
     depends_on:
       - db
 

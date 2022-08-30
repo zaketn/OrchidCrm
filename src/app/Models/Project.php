@@ -94,4 +94,21 @@ class Project extends Model
             ->flatten()
             ->toArray();
     }
+
+    public function countTasksByStatus() : array
+    {
+        $relatedTasks = $this->tasks()->get();
+
+        return $relatedTasks->groupBy('status')
+            ->map(fn($value) => $value->count())
+            ->flatten()
+            ->toArray();
+    }
+
+    public function getStatusesOfRelatedTasks() : array
+    {
+        $relatedTasks = Project::find(1)->tasks()->get();
+
+        return array_keys($relatedTasks->groupBy('status')->toArray());
+    }
 }

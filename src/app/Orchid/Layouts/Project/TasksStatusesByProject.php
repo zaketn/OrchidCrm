@@ -4,14 +4,14 @@ namespace App\Orchid\Layouts\Project;
 
 use Orchid\Screen\Layouts\Chart;
 
-class EmployeesRolesByProject extends Chart
+class TasksStatusesByProject extends Chart
 {
     /**
      * Add a title to the Chart.
      *
      * @var string
      */
-    protected $title = 'Команда проекта';
+    protected $title = 'Выполнение задач';
 
     /**
      * Available options:
@@ -20,7 +20,7 @@ class EmployeesRolesByProject extends Chart
      *
      * @var string
      */
-    protected $type = 'pie';
+    protected $type = 'percentage';
 
     /**
      * Data source.
@@ -30,7 +30,7 @@ class EmployeesRolesByProject extends Chart
      *
      * @var string
      */
-    protected $target = 'charts.employeesByProjectChart';
+    protected $target = 'charts.tasksStatusesByProjectChart';
 
     /**
      * Determines whether to display the export button.

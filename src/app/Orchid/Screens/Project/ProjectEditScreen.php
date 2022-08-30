@@ -4,9 +4,14 @@ namespace App\Orchid\Screens\Project;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Notifications\InvitingToProject;
 use App\Orchid\Layouts\Project\EmployeesRolesByProject;
+use App\Orchid\Layouts\Project\TasksStatusesByProject;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Orchid\Screen\Actions\Button;
+use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
@@ -26,16 +31,36 @@ class ProjectEditScreen extends Screen
      */
     public function query(Project $project): iterable
     {
-        return [
+        $layout =  [
             'project' => $project,
-            'employeesByProjectChart' => [
-                [
-                    'name' => 'Сотрудники по должностям',
-                    'labels' => $project->getRoleNamesOfTeam(),
-                    'values' => $project->countTeamMembersByRole(),
-                ]
-            ],
         ];
+
+        if($project->exists){
+            $layout['metrics'] = [
+                'status' => $project->presenter()->localizedStatus(),
+                'teamAmount' => $project->employees()->count(),
+                'customerCompany' => $project->customers()->first()->company()->first()->name
+            ];
+
+            $layout['charts'] = [
+                'employeesByProjectChart' => [
+                    [
+                        'name' => 'Сотрудники по должностям',
+                        'labels' => $project->getRoleNamesOfTeam(),
+                        'values' => $project->countTeamMembersByRole(),
+                    ]
+                ],
+                'tasksStatusesByProjectChart' => [
+                    [
+                        'name' => 'Выполнение задач',
+                        'labels' => $project->getStatusesOfRelatedTasks(),
+                        'values' => $project->countTasksByStatus(),
+                    ]
+                ],
+            ];
+        }
+
+        return $layout;
     }
 
     /**
@@ -55,18 +80,33 @@ class ProjectEditScreen extends Screen
      */
     public function commandBar(): iterable
     {
-        return [
+        $commandBar = [
             Button::make('Удалить')
                 ->method('delete')
                 ->canSee($this->project->exists)
                 ->confirm('Вы действительно хотите удалить проект?')
                 ->icon('trash'),
 
-            Button::make($this->project->exists ? 'Редактировать' : 'Создать')
+            Button::make($this->project->exists ? 'Сохранить' : 'Создать')
                 ->method('createOrUpdate')
                 ->confirm('Вы действительно хотите обновить данные проекта?')
                 ->icon('pencil'),
         ];
+
+        if ($contract = $this->project->attachment()->first())
+            array_unshift($commandBar,
+                Link::make('Договор')
+                    ->href($contract->url())
+                    ->target('_blank')
+                    ->icon('doc'),
+
+                Link::make('Репозиторий')
+                    ->href($this->project->repo_link)
+                    ->target('_blank')
+                    ->icon('social-github'),
+            );
+
+        return $commandBar;
     }
 
     /**
@@ -119,18 +159,28 @@ class ProjectEditScreen extends Screen
                     ->maxFiles(1)
                     ->acceptedFiles('application/pdf')
                     ->title('Договор')
-            ]),
+            ])
+                ->canSee(Auth::user()->hasAccess('platform.projects.edit')),
         ];
 
-        if($this->project->exists)
-            $layout[] = EmployeesRolesByProject::class;
+        if ($this->project->exists)
+            array_unshift($layout,
+                Layout::metrics([
+                    'Статус' => 'metrics.status',
+                    'Размер команды' => 'metrics.teamAmount',
+                    'Компания заказчика' => 'metrics.customerCompany'
+                ]),
+
+                Layout::columns([
+                    EmployeesRolesByProject::class,
+                    TasksStatusesByProject::class,
+                ]));
 
         return $layout;
     }
 
     public function createOrUpdate(Project $project, Request $request)
     {
-//    TODO validate unique fields
         $request->validate([
             'project.name' => 'required|string|between:1,64',
             'project.repo_link' => 'required|between:1,128',
@@ -139,10 +189,13 @@ class ProjectEditScreen extends Screen
         ]);
 
         $projectUsers = array_merge($request->project['customers'], $request->project['employees']);
+        $newProjectUsers = collect($projectUsers)->diff($project->users->pluck('id'));
         $contractInput = $project->exists ? 'project.contract' : 'upload';
 
         $project->fill($request->project);
-        $project->contract = $request->input($contractInput)[0];
+        if(isset($request->input($contractInput)[0])){
+            $project->contract = $request->input($contractInput)[0];
+        }
         $project->save();
 
         $project->users()->sync($projectUsers);
@@ -151,6 +204,7 @@ class ProjectEditScreen extends Screen
             $request->input($contractInput, [])
         );
 
+        Notification::send(User::whereIn('id', $newProjectUsers)->get(), (new InvitingToProject($project)));
         Toast::success('Успешно!');
 
         return redirect()->route('platform.projects.edit', $project);

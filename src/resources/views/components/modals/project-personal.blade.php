@@ -27,7 +27,7 @@
                                     <a href="{{ $project->repo_link }}">Ссылка</a>
                                 </td>
                                 <td>
-                                    {!! $project->presenter()->localizedStatus() !!}
+                                    {!! $project->presenter()->localizedStatus(true) !!}
                                 </td>
                                 <td>
                                     @if($contract = $project->contract()->first())
